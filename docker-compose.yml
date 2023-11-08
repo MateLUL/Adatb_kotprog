@@ -1,0 +1,38 @@
+version: '3.1'
+volumes:
+  database:
+
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: adatb_mysql
+    restart: always
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: adatb
+      MYSQL_DATABASE: ingatlan
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: adatb_phpmyadmin
+    environment:
+      PMA_HOST: 'mysql'
+      PMA_USER: 'root'
+      PMA_PASSWORD: 'adatb'
+
+    ports:
+      - 8079:80
+    restart: always
+
+    depends_on:
+      - mysql
+
+  web:
+    build: .
+    container_name: adatb_web
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8000:80
