@@ -1,6 +1,5 @@
 <?php
 require "sql_csatlakozas.php";
-connect();
 
 $azonosito = trim($_POST['azonosito']);
 $jelszo = trim($_POST['jelszo']);
@@ -12,11 +11,7 @@ if (isset($azonosito) && isset($jelszo)) {
     if ($eredmeny->num_rows == 1) {
         while ($user = $eredmeny->fetch_assoc()) {
             if (password_verify($jelszo, $user['jelszo'])) {
-                $idSQL = "SELECT id FROM users WHERE azonosito='$azonosito'";
-                $idEredmeny = $csatlakozas->query($idSQL);
-                $id = $idEredmeny->fetch_assoc();
-                
-                header("Location: ./../hirek.php");
+                header("Location: ./../index.php");
                 //session
             } else {
                 echo "Hibás jelszó.";

@@ -1,6 +1,5 @@
 <?php
 require "sql_csatlakozas.php";
-connect();
 
 $azonosito = trim($_POST["azonosito"]);
 $jelszo = trim($_POST["jelszo"]);
@@ -69,8 +68,8 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
     }
 
     if (count($hibak) === 0) {
-        $users = "INSERT INTO users (email, fhnev, jelszo, veznev, kernev, szuldatum, nem) VALUES ('$email', '$fhnev', '$hasheltJelszo', '$veznev', '$kernev', '$szuldatum', '$nem')";
-        $userprofile = "INSERT INTO userprofile (userId) VALUES (LAST_INSERT_ID())";
+        //FRISSÍTENI
+        $felhasznalo_regisztracio = "INSERT INTO felhasznalok (email, fhnev, jelszo, veznev, kernev, szuldatum, nem) VALUES ('$email', '$fhnev', '$hasheltJelszo', '$veznev', '$kernev', '$szuldatum', '$nem')";
 
         if ($csatlakozas->query($users) === TRUE && $csatlakozas->query($userprofile) === TRUE) {
             header("Location: ./../bejelentkezes_oldal.php");
