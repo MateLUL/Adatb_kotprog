@@ -1,10 +1,10 @@
 <?php
-require "session.php";
 
 if (isset($kijelentkezes))
 {
-    startSession();
-    stopSession();
+    session_start();
+    session_unset();
+    session_destroy();
     header("Location: ./../index.php");
 }
 ?>

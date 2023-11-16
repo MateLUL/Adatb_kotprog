@@ -19,7 +19,7 @@ $anyja_vezeteknev = trim($_POST["anyja_vezeteknev"]);
 $hibak = [];
 
 
-//Ha a formon belül minden inputba került adat
+// Hibakezelés
 if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezeteknev) && isset($keresztnev) && isset($szuldatum) && isset($adoszam) && isset($iranyitoszam) && isset($varos) && isset($utca) && isset($hazszam) && isset($telefonszam) && isset($anyja_keresztnev) && isset($anyja_vezeteknev)) {
     $hasheltJelszo = password_hash($jelszo, PASSWORD_DEFAULT);
 
@@ -50,8 +50,8 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
     if (strlen($utca) < 2 || strlen($utca) > 255) {
         $hibak[] = "Túl hosszú vagy rövid az utca. Minimum 2, maximum 255 karakterből kell állnia.";
     }
-    if (strlen($hazszam) < 5 || strlen($hazszam) > 255) {
-        $hibak[] = "Túl hosszú vagy rövid a házszám. Minimum 5, maximum 255 karakterből kell állnia.";
+    if (strlen($hazszam) > 255) {
+        $hibak[] = "Túl hosszú a házszám. Maximum 255 karakterből kell állnia.";
     }
     if (strlen($anyja_keresztnev) < 2 || strlen($anyja_keresztnev) > 255) {
         $hibak[] = "Túl hosszú vagy rövid az anyja keresztneve. Minimum 2, maximum 255 karakterből kell állnia.";
@@ -60,26 +60,51 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
         $hibak[] = "Túl hosszú vagy rövid az anyja vezetékneve. Minimum 2, maximum 255 karakterből kell állnia.";
     }
 
-    $azonosito_elerheto = "SELECT azonosito FROM felhasznalok WHERE azonosito='$azonosito'";
-    $azonosito_elerheto_query = $csatlakozas->query($fhnevElerheto);
+    $azonosito_elerheto = "SELECT azonosito FROM felhasznalo WHERE azonosito='$azonosito'";
+    $azonosito_elerheto_query = $csatlakozas->query($azonosito_elerheto);
 
     if ($azonosito_elerheto_query->num_rows > 0) {
-        $hibak[] = "A felhasználónév foglalt.";
+        $hibak[] = "Az azonosító foglalt.";
     }
 
+    // Ha nincs hiba
     if (count($hibak) === 0) {
-        //FRISSÍTENI
-        $felhasznalo_regisztracio = "INSERT INTO felhasznalok (email, fhnev, jelszo, veznev, kernev, szuldatum, nem) VALUES ('$email', '$fhnev', '$hasheltJelszo', '$veznev', '$kernev', '$szuldatum', '$nem')";
+        // Adatok mentése
+        $felhasznalo = "INSERT INTO felhasznalo (azonosito, jelszo) VALUES ('$azonosito', '$hasheltJelszo');";
+        $felhasznalo_adoszam = "INSERT INTO felhasznalo_adoszam (azonosito, adoszam) VALUES ('$azonosito', '$adoszam');";
+        $felhasznalo_infok = "INSERT INTO felhasznalo_infok (azonosito, telefonszam, szuletesi_datum) VALUES ('$azonosito', '$telefonszam', '$szuldatum');";
+        $iranyitoszam_telepules = "INSERT INTO iranyitoszam_telepules (iranyitoszam, telepules) VALUES ('$iranyitoszam', '$varos')";
+        $felhasznalo_lakcim = "INSERT INTO felhasznalo_lakcim (azonosito, iranyitoszam, utca, hazszam) VALUES ('$azonosito', '$iranyitoszam', '$utca', '$hazszam');";
+        $felhasznalo_neve = "INSERT INTO felhasznalo_neve (azonosito, vezeteknev, keresztnev) VALUES ('$azonosito', '$vezeteknev', '$keresztnev');";
+        $felhasznalo_anyja_neve = "INSERT INTO felhasznalo_anyja_neve (azonosito, vezeteknev, keresztnev) VALUES ('$azonosito', '$anyja_vezeteknev', '$anyja_keresztnev');";
 
-        if ($csatlakozas->query($users) === TRUE && $csatlakozas->query($userprofile) === TRUE) {
+        // Irányítószám lekérése
+        $telepules_elerheto = "SELECT iranyitoszam, telepules FROM iranyitoszam_telepules WHERE iranyitoszam='$iranyitoszam'";
+        $telepules_elerheto_query = $csatlakozas->query($telepules_elerheto);
+
+        // Ha van már ilyen irányítószámú település a táblában, akkor az $iranyitoszam_telepules queryt skipeljük
+        if ($telepules_elerheto_query->num_rows > 0) {
+            if ($csatlakozas->query($felhasznalo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
+                session_start();
+                $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
+                header("Location: ./../bejelentkezes_oldal.php");
+            } else {
+                echo "SQL hiba.";
+            }
+        }
+
+        // Queryk futtatása
+        if ($csatlakozas->query($felhasznalo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($iranyitoszam_telepules) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
+            session_start();
+            $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
             header("Location: ./../bejelentkezes_oldal.php");
         } else {
-            echo "Hiba: " . $sqlQuery . "<br>" . $csatlakozas->error;
+            echo "SQL hiba.";
         }
     } else {
-        foreach ($hibak as $hiba) {
-            echo $hiba . "<br>";
-        }
+        session_start();
+        $_SESSION['hiba'] = $hibak;
+        header("Location: ./../regisztracio_oldal.php");
     }
 }
 

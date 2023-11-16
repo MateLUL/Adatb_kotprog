@@ -5,20 +5,26 @@ $azonosito = trim($_POST['azonosito']);
 $jelszo = trim($_POST['jelszo']);
 
 if (isset($azonosito) && isset($jelszo)) {
-    $sqlQuery = "SELECT azonosito, jelszo FROM users WHERE azonosito='$azonosito'";
+    $sqlQuery = "SELECT azonosito, jelszo FROM felhasznalo WHERE azonosito='$azonosito'";
     $eredmeny = $csatlakozas->query($sqlQuery);
 
     if ($eredmeny->num_rows == 1) {
         while ($user = $eredmeny->fetch_assoc()) {
             if (password_verify($jelszo, $user['jelszo'])) {
+                session_start();
+                $_SESSION['azonosito'] = $azonosito;
+
                 header("Location: ./../index.php");
-                //session
             } else {
-                echo "Hibás jelszó.";
+                session_start();
+                $_SESSION['login_hiba'] = "login_hiba";
+                header("Location: ./../bejelentkezes_oldal.php");
             }
         }
     } else {
-        echo "Hibás felhasználónév.";
+        session_start();
+        $_SESSION['login_hiba'] = "login_hiba";
+        header("Location: ./../bejelentkezes_oldal.php");
     }
 }
 

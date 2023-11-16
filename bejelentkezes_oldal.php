@@ -1,3 +1,17 @@
+<?php
+session_start();
+if (isset($_SESSION['sikeres_regisztracio'])) {
+    echo "Sikeres regisztráció!";
+}
+
+if (isset($_SESSION['login_hiba'])) {
+    echo "Hibás felhasználónév vagy jelszó.";
+}
+
+session_unset();
+session_destroy();
+?>
+
 <!DOCTYPE html>
 <html lang="hu">
 
@@ -8,6 +22,7 @@
 </head>
 
 <body>
+
     <div>
         <form action="./php/bejelentkezes.php" method="post">
             <label for="azonosito">Azonosító</label>
