@@ -13,6 +13,7 @@ if (isset($azonosito) && isset($jelszo)) {
             if (password_verify($jelszo, $user['jelszo'])) {
                 session_start();
                 $_SESSION['azonosito'] = $azonosito;
+                $_SESSION['belepett'] = "belepett";
 
                 header("Location: ./../index.php");
             } else {

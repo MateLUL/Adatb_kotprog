@@ -1,3 +1,16 @@
+<?php
+session_start();
+if (isset($_SESSION['kijelentkezve'])) {
+    echo "Sikeres kijelentkezés.";
+    session_unset();
+    session_destroy();
+}
+
+if (isset($_SESSION['belepett'])) {
+    echo "Sikeres bejelentkezés.";
+    unset($_SESSION['belepett']);
+}
+?>
 <!DOCTYPE html>
 <html lang="hu">
 

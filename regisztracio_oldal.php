@@ -6,10 +6,14 @@ if (isset($_SESSION['hiba'])) {
     foreach ($_SESSION['hiba'] as $hiba) {
         echo $hiba . "<br>";
     }
+
+    session_unset();
+    session_destroy();
 }
 
-session_unset();
-session_destroy();
+if (isset($_SESSION['azonosito'])) {
+    header("Location: index.php");
+}
 ?>
 
 

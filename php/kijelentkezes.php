@@ -3,8 +3,7 @@
 if (isset($kijelentkezes))
 {
     session_start();
-    session_unset();
-    session_destroy();
+    $_SESSION['kijelentkezve'] = "kijelentkezve";
     header("Location: ./../index.php");
 }
 ?>

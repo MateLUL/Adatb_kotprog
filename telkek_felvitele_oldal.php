@@ -1,7 +1,5 @@
 <?php
-    require "./php/session.php";
-    startSession();
-    checkSession();
+
 ?>
 
 <!DOCTYPE html>
