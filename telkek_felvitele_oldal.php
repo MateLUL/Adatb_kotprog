@@ -1,5 +1,9 @@
 <?php
+session_start();
 
+if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
+    header("Location: index.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,9 +16,6 @@
 </head>
 
 <body>
-    <a href="bejelentkezes_oldal.php">Bejelentkezés</a>
-    <br>
-    <a href="regisztracio_oldal.php">Regisztráció</a>
+    <?php require "navbar.php"; ?>
 </body>
-
 </html>

@@ -28,6 +28,7 @@ if (isset($_SESSION['azonosito'])) {
 </head>
 
 <body>
+    <?php require "navbar.php"; ?>
     <div>
         <form action="./php/regisztracio.php" method="post">
             <label for="azonosito">Azonosító</label>

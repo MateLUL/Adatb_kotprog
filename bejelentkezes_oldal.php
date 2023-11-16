@@ -12,7 +12,7 @@ if (isset($_SESSION['login_hiba'])) {
     session_destroy();
 }
 
-if (isset($_SESSION['azonosito'])) {
+if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
     header("Location: index.php");
 }
 ?>
@@ -27,7 +27,7 @@ if (isset($_SESSION['azonosito'])) {
 </head>
 
 <body>
-
+    <?php require "navbar.php"; ?>
     <div>
         <form action="./php/bejelentkezes.php" method="post">
             <label for="azonosito">Azonosító</label>

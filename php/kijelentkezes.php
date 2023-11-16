@@ -1,4 +1,5 @@
 <?php
+$kijelentkezes = $_POST['kijelentkezes'];
 
 if (isset($kijelentkezes))
 {

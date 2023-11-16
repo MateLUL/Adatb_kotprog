@@ -21,9 +21,7 @@ if (isset($_SESSION['belepett'])) {
 </head>
 
 <body>
-    <a href="bejelentkezes_oldal.php">Bejelentkezés</a>
-    <br>
-    <a href="regisztracio_oldal.php">Regisztráció</a>
+    <?php require "navbar.php"; ?>
 </body>
 
 </html>
