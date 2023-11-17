@@ -1,13 +1,13 @@
 <?php
 session_start();
 if (isset($_SESSION['sikeres_regisztracio'])) {
-    echo "Sikeres regisztráció!";
+    echo "Sikeres regisztráció!<br>";
     session_unset();
     session_destroy();
 }
 
 if (isset($_SESSION['login_hiba'])) {
-    echo "Hibás felhasználónév vagy jelszó.";
+    echo "Hibás felhasználónév vagy jelszó.<br>";
     session_unset();
     session_destroy();
 }

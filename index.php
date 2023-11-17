@@ -1,13 +1,13 @@
 <?php
 session_start();
 if (isset($_SESSION['kijelentkezve'])) {
-    echo "Sikeres kijelentkezés.";
+    echo "Sikeres kijelentkezés.<br>";
     session_unset();
     session_destroy();
 }
 
 if (isset($_SESSION['belepett'])) {
-    echo "Sikeres bejelentkezés.";
+    echo "Sikeres bejelentkezés.<br>";
     unset($_SESSION['belepett']);
 }
 ?>
