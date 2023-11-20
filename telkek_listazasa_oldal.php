@@ -27,7 +27,7 @@ if (isset($_SESSION['sikeres_tulajdonos_telek_hozzarendeles'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telkek felvitele - Ingatlan</title>
+    <title>Telkek listázása - Ingatlan</title>
 </head>
 
 <body>

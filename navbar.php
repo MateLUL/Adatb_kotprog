@@ -13,6 +13,8 @@ if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
         <br>
         <a href=\"telkek_felvitele_oldal.php\">Telek felvitele</a>
         <br>
+        <a href=\"ingatlan_listazasa_oldal.php\">Ingatlanok listázása</a>
+        <br>
         <a href=\"ingatlan_felvitele_oldal.php\">Ingatlan felvitele</a>
         <br>
         ";
