@@ -10,14 +10,12 @@ if (isset($_SESSION['sikeres_telek_felvitel'])) {
     unset($_SESSION['sikeres_telek_felvitel']);
 }
 
-if (isset($_SESSION['hiba'])) {
-    echo "Sikertelen telek felvitel.<br>";
-
-    foreach ($_SESSION['hiba'] as $hiba) {
+if (isset($_SESSION['hibak'])) {
+    foreach ($_SESSION['hibak'] as $hiba) {
         echo $hiba . "<br>";
     }
 
-    unset($_SESSION['hiba']);
+    unset($_SESSION['hibak']);
 }
 ?>
 

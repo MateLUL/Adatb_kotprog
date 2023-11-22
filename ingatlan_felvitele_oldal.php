@@ -7,17 +7,15 @@ if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
 
 if (isset($_SESSION['sikeres_ingatlan_felvitel'])) {
     echo "Sikeres ingatlan felvitel.<br>";
-    unset($_SESSION['sikeres_telek_felvitel']);
+    unset($_SESSION['sikeres_ingatlan_felvitel']);
 }
 
-if (isset($_SESSION['hiba'])) {
-    echo "Sikertelen ingatlan felvitel.<br>";
-
-    foreach ($_SESSION['hiba'] as $hiba) {
+if (isset($_SESSION['hibak'])) {
+    foreach ($_SESSION['hibak'] as $hiba) {
         echo $hiba . "<br>";
     }
 
-    unset($_SESSION['hiba']);
+    unset($_SESSION['hibak']);
 }
 ?>
 

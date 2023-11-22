@@ -4,21 +4,6 @@ session_start();
 if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
     header("Location: index.php");
 }
-
-if (isset($_SESSION['sikeres_ingatlan_modositas'])) {
-    echo "Sikeres ingatlan módosítás.<br>";
-    unset($_SESSION['sikeres_ingatlan_modositas']);
-}
-
-if (isset($_SESSION['hiba'])) {
-    echo "Sikertelen ingatlan felvitel.<br>";
-
-    foreach ($_SESSION['hiba'] as $hiba) {
-        echo $hiba . "<br>";
-    }
-
-    unset($_SESSION['hiba']);
-}
 ?>
 
 <!DOCTYPE html>

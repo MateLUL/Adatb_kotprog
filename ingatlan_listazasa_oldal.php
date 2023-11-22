@@ -15,22 +15,27 @@ if (isset($_SESSION['sikeres_ingatlan_modositas'])) {
     unset($_SESSION['sikeres_ingatlan_modositas']);
 }
 
-if (isset($_SESSION['sikeres_torles'])) {
-    echo "Sikeres tulajdonos törlés.<br>";
-    unset($_SESSION['sikeres_torles']);
-}
-
 if (isset($_SESSION['sikeres_tulajdonos_ingatlan_hozzarendeles'])) {
     echo "Sikeres tulajdonos hozzárendelés.<br>";
     unset($_SESSION['sikeres_tulajdonos_ingatlan_hozzarendeles']);
 }
 
-if (isset($_SESSION['hiba'])) {
-    foreach ($_SESSION['hiba'] as $hiba) {
+if (isset($_SESSION['sikeres_tulajdonos_modositas'])) {
+    echo "Sikeres tulajdonos módosítás.<br>";
+    unset($_SESSION['sikeres_tulajdonos_modositas']);
+}
+
+if (isset($_SESSION['sikeres_torles'])) {
+    echo "Sikeres tulajdonos törlés.<br>";
+    unset($_SESSION['sikeres_torles']);
+}
+
+if (isset($_SESSION['hibak'])) {
+    foreach ($_SESSION['hibak'] as $hiba) {
         echo $hiba . "<br>";
     }
 
-    unset($_SESSION['hiba']);
+    unset($_SESSION['hibak']);
 }
 ?>
 
@@ -73,7 +78,7 @@ if (isset($_SESSION['hiba'])) {
             <p>Ingatlan azonosító: " . $ingatlan['ingatlan_azonosito'] . "</p>
             <p>Jelleg: " . $ingatlan['jelleg'] . "</p>
             <p>Építés éve: " . $ingatlan['epites_eve'] . "</p>
-            <p>Becsült érték: " . $ingatlan['becsult_ertek'] . "</p>
+            <p>Becsült érték: " . $ingatlan['becsult_ertek'] . " Ft</p>
             <p>Helyrajzi szám: " . $ingatlan['helyrajzi_szam'] . "</p>
             <p>Irányítószám: " . $ingatlan['iranyitoszam'] . "</p>
             <p>Közterület: " . $ingatlan['kozterulet'] . "</p>
@@ -100,18 +105,28 @@ if (isset($_SESSION['hiba'])) {
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {
-                    echo "<p>Tulajdonosok:</p>";
+                    echo "<p>Tulajdonosok:</p>
+                    <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Új tulajdonos hozzárendelése az ingatlanhoz</a>
+                    ";
 
                     foreach ($tulajdonos_vizsgalat_query as $tulajdonos) {
                         echo "<p>Azonosító: " . $tulajdonos['azonosito'] . "</p>";
                         echo "<p>Tulajdonba kerülés: " . $tulajdonos['tulajdonba_kerules'] . "</p>";
-                        echo "<p>Tulajdonhányad százalékban: " . $tulajdonos['tulajdonhanyad'] . "</p>";
+                        echo "<p>Tulajdonhányad százalékban: " . $tulajdonos['tulajdonhanyad'] . "%</p>";
                         echo "
-                        <form action=\"./php/tulajdonos_ingatlan_torles.php\" method=\"post\">
-                            <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
-                            <input type=\"submit\" value=\"Tulajdonos törlése\" name=\"tulajdonos_torles\">
-                        </form>
-                        <br>";
+                            <form action=\"./php/tulajdonos_ingatlan_torles.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
+                                <input type=\"submit\" value=\"Tulajdonos törlése\" name=\"tulajdonos_torles\">
+                            </form>
+
+                            <form action=\"./tulajdonos_ingatlan_modositas.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"ingatlan_azonosito\" value=\"" . $ingatlan['ingatlan_azonosito'] . "\">
+                                <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
+                                <input type=\"hidden\" name=\"tulajdonhanyad\" value=\"" . $tulajdonos['tulajdonhanyad'] . "\">
+
+                                <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
+                            </form>
+                            <br>";
                     }
                 } else {
                     echo "
@@ -140,7 +155,7 @@ if (isset($_SESSION['hiba'])) {
             <p>Ingatlan azonosító: " . $ingatlan['ingatlan_azonosito'] . "</p>
             <p>Jelleg: " . $ingatlan['jelleg'] . "</p>
             <p>Építés éve: " . $ingatlan['epites_eve'] . "</p>
-            <p>Becsült érték: " . $ingatlan['becsult_ertek'] . "</p>
+            <p>Becsült érték: " . $ingatlan['becsult_ertek'] . " Ft</p>
             <p>Helyrajzi szám: " . $ingatlan['helyrajzi_szam'] . "</p>
             <p>Irányítószám: " . $ingatlan['iranyitoszam'] . "</p>
             <p>Közterület: " . $ingatlan['kozterulet'] . "</p>
@@ -167,18 +182,30 @@ if (isset($_SESSION['hiba'])) {
                     $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                     if ($tulajdonos_vizsgalat_query->num_rows > 0) {
-                        echo "<p>Tulajdonosok:</p>";
+                        echo "<p>Tulajdonosok:</p>
+                        <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Új tulajdonos hozzárendelése az ingatlanhoz</a>
+                        ";
 
                         foreach ($tulajdonos_vizsgalat_query as $tulajdonos) {
                             echo "<p>Azonosító: " . $tulajdonos['azonosito'] . "</p>";
                             echo "<p>Tulajdonba kerülés: " . $tulajdonos['tulajdonba_kerules'] . "</p>";
-                            echo "<p>Tulajdonhányad százalékban: " . $tulajdonos['tulajdonhanyad'] . "</p>";
+                            echo "<p>Tulajdonhányad százalékban: " . $tulajdonos['tulajdonhanyad'] . "%</p>";
                             echo "
-                        <form action=\"./php/tulajdonos_ingatlan_torles.php\" method=\"post\">
-                            <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
-                            <input type=\"submit\" value=\"Tulajdonos törlése\" name=\"tulajdonos_torles\">
-                        </form>
-                        <br>";
+                            <form action=\"./php/tulajdonos_ingatlan_torles.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
+                                <input type=\"submit\" value=\"Tulajdonos törlése\" name=\"tulajdonos_torles\">
+                            </form>
+
+                            <form action=\"./tulajdonos_ingatlan_modositas.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"ingatlan_azonosito\" value=\"" . $ingatlan['ingatlan_azonosito'] . "\">
+                                <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
+                                <input type=\"hidden\" name=\"tulajdonhanyad\" value=\"" . $tulajdonos['tulajdonhanyad'] . "\">
+
+                                <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
+                            </form>
+                            <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
+
+                            <br>";
                         }
                     } else {
                         echo "
@@ -188,10 +215,12 @@ if (isset($_SESSION['hiba'])) {
                     ";
                     }
                 }
+            } else {
+                echo "Nincs ilyen azonosítójú ingatlan.";
             }
         } else {
             session_start();
-            $_SESSION['hiba'] = $hibak;
+            $_SESSION['hibak'] = $hibak;
             header("Location: ./ingatlan_listazasa_oldal.php");
         }
     }

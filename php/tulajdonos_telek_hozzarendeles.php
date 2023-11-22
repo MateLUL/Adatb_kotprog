@@ -4,7 +4,7 @@ require "sql_csatlakozas.php";
 $hozzarendeles = $_POST['hozzarendeles'];
 $azonosito = $_POST['azonosito'];
 $tulajdonhanyad = $_POST['tulajdonhanyad'];
-$helyrazi_szam = $_POST['helyrajzi_szam'];
+$helyrajzi_szam = $_POST['helyrajzi_szam'];
 $hibak = [];
 
 if (isset($hozzarendeles)) {
@@ -22,21 +22,31 @@ if (isset($hozzarendeles)) {
         $hibak[] = "Nem létezik ilyen azonosítójú felhasználó.";
     }
 
-    $tulajdonos_telek = "INSERT INTO tulajdonos_telek_birtoklas (azonosito, helyrajzi_szam, tulajdonhanyad) VALUES ('$azonosito', '$helyrazi_szam', '$tulajdonhanyad');";
+    $tulajdonos_telek_letezik = "SELECT azonosito FROM tulajdonos_telek_birtoklas WHERE azonosito='$azonosito' AND helyrajzi_szam='$helyrajzi_szam';";
+    $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
+
+    if ($tulajdonos_telek_letezik_query->num_rows > 0) {
+        $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja ezt a telket.";
+    }
+
+    $tulajdonos_telek = "INSERT INTO tulajdonos_telek_birtoklas (azonosito, helyrajzi_szam, tulajdonhanyad) VALUES ('$azonosito', '$helyrajzi_szam', '$tulajdonhanyad');";
 
     if (count($hibak) === 0) {
         if ($csatlakozas->query($tulajdonos_telek) === TRUE) {
             session_start();
             $_SESSION['sikeres_tulajdonos_telek_hozzarendeles'] = "sikeres_tulajdonos_telek_hozzarendeles";
             header("Location: ./../telkek_listazasa_oldal.php");
+            exit();
         } else {
             echo "SQL hiba.";
         }
     } else {
         session_start();
-        $_SESSION['hiba'] = $hibak;
-        header("Location: ./../telkek_listazasa_oldal.php");
+        $_SESSION['hibak'] = $hibak;
+        header("Location: ./../tulajdonos_telek_hozzarendeles.php?helyrajzi_szam=$helyrajzi_szam");
+        exit();
     }
 }
 
 disconnect();
+?>

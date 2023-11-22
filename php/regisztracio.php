@@ -103,7 +103,7 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
         }
     } else {
         session_start();
-        $_SESSION['hiba'] = $hibak;
+        $_SESSION['hibak'] = $hibak;
         header("Location: ./../regisztracio_oldal.php");
     }
 }

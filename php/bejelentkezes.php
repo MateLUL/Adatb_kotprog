@@ -16,7 +16,12 @@ if (isset($azonosito) && isset($jelszo)) {
                 $_SESSION['belepett'] = "belepett";
                 $_SESSION['szerepkor'] = $user['szerepkor'];
 
-                header("Location: ./../index.php");
+                $bejelentkezett = "UPDATE felhasznalo SET `be_van-e_jelentkezve` = 1, utolso_belepes_idopontja = now() WHERE azonosito = '$azonosito';";
+                $bejelentkezett_query = $csatlakozas->query($bejelentkezett);
+
+                if ($bejelentkezett_query === TRUE) {
+                    header("Location: ./../index.php");
+                }
             } else {
                 session_start();
                 $_SESSION['login_hiba'] = "login_hiba";

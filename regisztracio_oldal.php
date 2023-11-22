@@ -1,14 +1,11 @@
 <?php
 session_start();
-if (isset($_SESSION['hiba'])) {
-    echo "Sikertelen regisztráció<br>";
-
-    foreach ($_SESSION['hiba'] as $hiba) {
+if (isset($_SESSION['hibak'])) {
+    foreach ($_SESSION['hibak'] as $hiba) {
         echo $hiba . "<br>";
     }
 
-    session_unset();
-    session_destroy();
+    unset($_SESSION['hibak']);
 }
 
 if (isset($_SESSION['azonosito'])) {

@@ -74,7 +74,7 @@ if (isset($modositas)) {
         }
     } else {
         session_start();
-        $_SESSION['hiba'] = $hibak;
+        $_SESSION['hibak'] = $hibak;
         header("Location: ./../ingatlan_listazasa_oldal.php");
     }
 }

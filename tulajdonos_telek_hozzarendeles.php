@@ -13,6 +13,14 @@ if (isset($_SESSION['sikeres_telek_felvitel'])) {
     echo "Sikeres telek felvitel.<br>";
     unset($_SESSION['sikeres_telek_felvitel']);
 }
+
+if (isset($_SESSION['hibak'])) {
+    foreach ($_SESSION['hibak'] as $hiba) {
+        echo $hiba . "<br>";
+    }
+
+    unset($_SESSION['hibak']);
+}
 ?>
 
 <!DOCTYPE html>

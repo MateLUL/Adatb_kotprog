@@ -2,17 +2,17 @@
 session_start();
 if (isset($_SESSION['sikeres_regisztracio'])) {
     echo "Sikeres regisztráció!<br>";
-    session_unset();
-    session_destroy();
+    unset($_SESSION['sikeres_regisztracio']);
+
 }
 
 if (isset($_SESSION['login_hiba'])) {
     echo "Hibás felhasználónév vagy jelszó.<br>";
-    session_unset();
-    session_destroy();
+    unset($_SESSION['login_hiba']);
+
 }
 
-if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
+if (isset($_SESSION['azonosito'])) {
     header("Location: index.php");
 }
 ?>

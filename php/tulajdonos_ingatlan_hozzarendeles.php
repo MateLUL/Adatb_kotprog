@@ -22,6 +22,13 @@ if (isset($hozzarendeles)) {
         $hibak[] = "Nem létezik ilyen azonosítójú felhasználó.";
     }
 
+    $tulajdonos_ingatlan_letezik = "SELECT azonosito FROM tulajdonos_ingatlan_birtoklas WHERE azonosito='$azonosito' AND ingatlan_azonosito='$ingatlan_azonosito';";
+    $tulajdonos_ingatlan_letezik_query = $csatlakozas->query($tulajdonos_ingatlan_letezik);
+
+    if ($tulajdonos_ingatlan_letezik_query->num_rows > 0) {
+        $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja ezt az ingatlant.";
+    }
+
     $tulajdonos_ingatlan = "INSERT INTO tulajdonos_ingatlan_birtoklas (azonosito, ingatlan_azonosito, tulajdonhanyad) VALUES ('$azonosito', '$ingatlan_azonosito', '$tulajdonhanyad');";
 
     if (count($hibak) === 0) {
@@ -34,8 +41,8 @@ if (isset($hozzarendeles)) {
         }
     } else {
         session_start();
-        $_SESSION['hiba'] = $hibak;
-        header("Location: ./../ingatlan_listazasa_oldal.php");
+        $_SESSION['hibak'] = $hibak;
+        header("Location: ./../tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=$ingatlan_azonosito");
     }
 }
 

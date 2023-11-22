@@ -66,7 +66,7 @@ if (isset($felvitel)) {
         }
     } else {
         session_start();
-        $_SESSION['hiba'] = $hibak;
+        $_SESSION['hibak'] = $hibak;
         header("Location: ./../ingatlan_felvitele_oldal.php");
     }
 }
