@@ -39,6 +39,10 @@ CREATE TABLE `felhasznalo` (
 -- Dumping data for table `felhasznalo`
 --
 
+--
+-- user1-user50 jelszo: password123
+--
+
 INSERT INTO `felhasznalo` (`azonosito`, `jelszo`, `utolso_belepes_idopontja`, `be_van-e_jelentkezve`, `szerepkor`) VALUES
 ('aaaaaa', '$2y$10$6nUqpyj/44cWJXtuD8jEg.R1ID5gKaf4XCRmdFoRQIF.IAN00FVSy', NULL, 0, 2),
 ('asd111', '$2y$10$Tdp0xIDaEBaYTUpWhSce3uwknCnyNquiuP7NontDYyT1KiwliXMzy', NULL, 0, 2),
