@@ -51,7 +51,7 @@ if (isset($_SESSION['hibak'])) {
 <body>
     <?php require "navbar.php"; ?>
 
-    <form action="" method="post">
+    <form action="" method="get">
         <label for="ingatlan_azonosito">Ingatlan azonosító</label>
         <input type="text" name="ingatlan_azonosito" id="ingatlan_azonosito" required>
         <br>
@@ -59,7 +59,7 @@ if (isset($_SESSION['hibak'])) {
         <input type="submit" value="Ingatlan azonosító alapján keresés" name="ingatlan_azonosito_alapjan">
     </form>
 
-    <form action="" method="post">
+    <form action="" method="get">
         <input type="submit" value="Összes telek listázása" name="osszes">
     </form>
 
@@ -69,12 +69,15 @@ if (isset($_SESSION['hibak'])) {
 
     $hibak = [];
 
-    if (isset($_POST['osszes'])) {
+    if (isset($_GET['osszes'])) {
         $osszes_query = $csatlakozas->query("SELECT * FROM ingatlan INNER JOIN ingatlan_cim ON ingatlan.ingatlan_azonosito = ingatlan_cim.ingatlan_azonosito;");
 
         if ($osszes_query->num_rows > 0) {
             foreach ($osszes_query as $ingatlan) {
                 echo "
+            <br>
+            <br>
+            <h3>Ingatlan:</h3>
             <p>Ingatlan azonosító: " . $ingatlan['ingatlan_azonosito'] . "</p>
             <p>Jelleg: " . $ingatlan['jelleg'] . "</p>
             <p>Építés éve: " . $ingatlan['epites_eve'] . "</p>
@@ -98,10 +101,9 @@ if (isset($_SESSION['hibak'])) {
 
                 <input type=\"submit\" value=\"Ingatlan módosítása\" name=\"ingatlan_modositas\">
             </form>
-            <br>
             ";
 
-                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_ingatlan_birtoklas WHERE ingatlan_azonosito = " . $ingatlan['ingatlan_azonosito'] . ";";
+                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_ingatlan_birtoklas WHERE ingatlan_azonosito = \"" . $ingatlan['ingatlan_azonosito'] . "\";";
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {
@@ -132,26 +134,28 @@ if (isset($_SESSION['hibak'])) {
                     echo "
                     <p>Az ingatlannak nincs tulajdonosa.</p>
                     <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
-                    <br>
                     ";
                 }
             }
         }
     }
 
-    if (isset($_POST['ingatlan_azonosito_alapjan'])) {
-        $ingatlan_azonosito = $_POST['ingatlan_azonosito'];
+    if (isset($_GET['ingatlan_azonosito_alapjan'])) {
+        $ingatlan_azonosito = $_GET['ingatlan_azonosito'];
 
         if (strlen($ingatlan_azonosito) > 255) {
             $hibak[] = "Túl hosszú a helyrajzi szám. Maximum 255 karakterből kell állnia.";
         }
 
         if (count($hibak) === 0) {
-            $ingatlan_azonosito_alapjan_query = $csatlakozas->query("SELECT * FROM ingatlan INNER JOIN ingatlan_cim ON ingatlan.ingatlan_azonosito = ingatlan_cim.ingatlan_azonosito AND ingatlan.ingatlan_azonosito = $ingatlan_azonosito;");
+            $ingatlan_azonosito_alapjan_query = $csatlakozas->query("SELECT * FROM ingatlan INNER JOIN ingatlan_cim ON ingatlan.ingatlan_azonosito = ingatlan_cim.ingatlan_azonosito AND ingatlan.ingatlan_azonosito = '$ingatlan_azonosito';");
 
             if ($ingatlan_azonosito_alapjan_query->num_rows > 0) {
                 foreach ($ingatlan_azonosito_alapjan_query as $ingatlan) {
                     echo "
+            <br>
+            <br>
+            <h3>Ingatlan:</h3>
             <p>Ingatlan azonosító: " . $ingatlan['ingatlan_azonosito'] . "</p>
             <p>Jelleg: " . $ingatlan['jelleg'] . "</p>
             <p>Építés éve: " . $ingatlan['epites_eve'] . "</p>
@@ -175,10 +179,9 @@ if (isset($_SESSION['hibak'])) {
 
                 <input type=\"submit\" value=\"Ingatlan módosítása\" name=\"ingatlan_modositas\">
             </form>
-            <br>
             ";
 
-                    $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_ingatlan_birtoklas WHERE ingatlan_azonosito = " . $ingatlan['ingatlan_azonosito'] . ";";
+                    $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_ingatlan_birtoklas WHERE ingatlan_azonosito = \"" . $ingatlan['ingatlan_azonosito'] . "\";";
                     $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                     if ($tulajdonos_vizsgalat_query->num_rows > 0) {
@@ -204,14 +207,12 @@ if (isset($_SESSION['hibak'])) {
                                 <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
                             </form>
                             <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
-
-                            <br>";
+                            ";
                         }
                     } else {
                         echo "
                     <p>Az ingatlannak nincs tulajdonosa.</p>
                     <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
-                    <br>
                     ";
                     }
                 }
