@@ -1,0 +1,36 @@
+SELECT tib.ingatlan_azonosito FROM tulajdonos_ingatlan_birtoklas AS tib
+INNER JOIN ingatlan i ON i.ingatlan_azonosito = tib.ingatlan_azonosito
+GROUP BY tib.ingatlan_azonosito
+HAVING COUNT(tib.ingatlan_azonosito) > 1;
+
+SELECT t.helyrajzi_szam FROM telek AS t
+INNER JOIN ingatlan i ON t.helyrajzi_szam != i.helyrajzi_szam;
+
+SELECT ttb.helyrajzi_szam, ttb.azonosito
+FROM tulajdonos_telek_birtoklas AS ttb
+INNER JOIN telek AS t ON t.helyrajzi_szam = ttb.helyrajzi_szam
+INNER JOIN ingatlan AS i ON i.helyrajzi_szam = t.helyrajzi_szam
+GROUP BY ttb.helyrajzi_szam, ttb.azonosito
+HAVING COUNT(i.helyrajzi_szam) > 1;
+
+SELECT tib.ingatlan_azonosito, ttb.helyrajzi_szam, (((t.becsult_ertek * 100) * ttb.tulajdonhanyad) / 1000) AS tulajdonhanyad_forintban
+FROM tulajdonos_ingatlan_birtoklas AS tib
+INNER JOIN ingatlan i ON i.ingatlan_azonosito = tib.ingatlan_azonosito AND tib.azonosito = "user1", tulajdonos_telek_birtoklas AS ttb
+INNER JOIN telek t ON t.helyrajzi_szam = ttb.helyrajzi_szam AND ttb.azonosito = "user1";
+
+
+
+SELECT
+    tib.ingatlan_azonosito,
+    ttb.helyrajzi_szam,
+    COUNT(DISTINCT tib.ingatlan_azonosito) AS count_ingatlan,
+    COUNT(ttb.helyrajzi_szam) AS count_helyrajzi,
+    (((t.becsult_ertek * 100) * ttb.tulajdonhanyad) / 1000) AS tulajdonhanyad_forintban
+FROM
+    tulajdonos_ingatlan_birtoklas AS tib
+INNER JOIN ingatlan i ON i.ingatlan_azonosito = tib.ingatlan_azonosito AND tib.azonosito = "user1"
+INNER JOIN tulajdonos_telek_birtoklas AS ttb ON ttb.azonosito = tib.azonosito
+INNER JOIN telek t ON t.helyrajzi_szam = ttb.helyrajzi_szam
+WHERE ttb.azonosito = "user1"
+GROUP BY tib.ingatlan_azonosito, ttb.helyrajzi_szam;
+
