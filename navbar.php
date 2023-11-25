@@ -21,7 +21,7 @@ if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
         <br>
         <a href=\"nincs_ingatlan_listazas.php\">Telkek listázása, ahol nincs ingatlan</a>
         <br>
-        <a href=\"tobb_ingatlan_telkek.php\">Telkek és tulajdonosok, ahol egynél több ingatlan található</a>
+        <a href=\"tobb_ingatlan_telkek.php\">Telkek és tulajdonosok listázása, ahol egynél több ingatlan található</a>
         <br>
         ";
     } else {
