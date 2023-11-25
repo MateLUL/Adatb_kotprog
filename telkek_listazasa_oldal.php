@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
+if (!isset($_SESSION['azonosito'])) {
     header("Location: index.php");
 }
 

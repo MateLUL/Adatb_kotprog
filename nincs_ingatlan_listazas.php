@@ -21,7 +21,7 @@ if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
     <?php
     require_once "./php/sql_csatlakozas.php";
 
-    $query = $csatlakozas->query("SELECT t.helyrajzi_szam FROM telek AS t
+    $query = $csatlakozas->query("SELECT DISTINCT t.helyrajzi_szam FROM telek AS t
     INNER JOIN ingatlan i ON t.helyrajzi_szam != i.helyrajzi_szam;");
 
     if ($query->num_rows > 0) {

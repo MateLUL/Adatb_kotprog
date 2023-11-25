@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
+if (!isset($_SESSION['azonosito'])) {
     header("Location: index.php");
 }
 
@@ -206,7 +206,6 @@ if (isset($_SESSION['hibak'])) {
 
                                 <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
                             </form>
-                            <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
                             ";
                         }
                     } else {

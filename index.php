@@ -10,6 +10,12 @@ if (isset($_SESSION['belepett'])) {
     echo "Sikeres bejelentkezés.<br>";
     unset($_SESSION['belepett']);
 }
+
+if (isset($_SESSION['sikeres_torles'])) {
+    echo "Fiók sikeresen törölve.<br>";
+    session_unset();
+    session_destroy();
+}
 ?>
 <!DOCTYPE html>
 <html lang="hu">

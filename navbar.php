@@ -5,8 +5,8 @@ if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
     <form action=\"./php/kijelentkezes.php\" method=\"post\">
     <input type=\"submit\" name=\"kijelentkezes\" value=\"Kijelentkezés\">
     </form>
-    <br>
-    ";
+    <br>";
+
     if ($_SESSION['szerepkor'] == 1) {
         echo "
         <a href=\"telkek_listazasa_oldal.php\">Telek listázása</a>
@@ -22,6 +22,15 @@ if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
         <a href=\"nincs_ingatlan_listazas.php\">Telkek listázása, ahol nincs ingatlan</a>
         <br>
         <a href=\"tobb_ingatlan_telkek.php\">Telkek és tulajdonosok, ahol egynél több ingatlan található</a>
+        <br>
+        ";
+    } else {
+        echo "
+        <a href=\"szemelyes_adatok_oldal.php\">Személyes adatok</a>
+        <br>
+        <a href=\"ingatlan_listazasa_oldal.php\">Ingatlanok megtekintése</a>
+        <br>
+        <a href=\"telkek_listazasa_oldal.php\">Telkek megtekintése</a>
         <br>
         ";
     }
