@@ -46,7 +46,7 @@ if (isset($_SESSION['hibak'])) {
 <body>
     <?php require "navbar.php"; ?>
 
-    <form action="" method="post">
+    <form action="" method="get">
         <label for="helyrajzi_szam">Helyrajzi szám</label>
         <input type="text" name="helyrajzi_szam" id="helyrajzi_szam" required>
         <br>
@@ -54,7 +54,7 @@ if (isset($_SESSION['hibak'])) {
         <input type="submit" value="Helyrajzi szám alapján keresés" name="helyrajzi_szam_alapjan">
     </form>
 
-    <form action="" method="post">
+    <form action="" method="get">
         <input type="submit" value="Összes telek listázása" name="osszes">
     </form>
 
@@ -64,20 +64,22 @@ if (isset($_SESSION['hibak'])) {
 
     $hibak = [];
 
-    if (isset($_POST['osszes'])) {
+    if (isset($_GET['osszes'])) {
         $osszes_query = $csatlakozas->query("SELECT * FROM telek;");
 
         if ($osszes_query->num_rows > 0) {
             foreach ($osszes_query as $telek) {
                 echo "
+            <br>
+            <br>
+            <h3>Telek:</h3>
             <p>Helyrajzi szám: " . $telek['helyrajzi_szam'] . "</p>
             <p>Méret: " . $telek['meret'] . "m<sup>2</sup></p>
             <p>Jelleg: " . $telek['jelleg'] . "</p>
             <p>Becsült érték: " . $telek['becsult_ertek'] . " Ft</p>
-            <br>
             ";
 
-                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_telek_birtoklas WHERE helyrajzi_szam = " . $telek['helyrajzi_szam'] . ";";
+                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_telek_birtoklas WHERE helyrajzi_szam = \"" . $telek['helyrajzi_szam'] . "\";";
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {
@@ -101,32 +103,33 @@ if (isset($_SESSION['hibak'])) {
 
                             <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
                         </form>
-                        <br>";
+                        ";
                     }
                 } else {
                     echo "
                     <p>A teleknek nincs tulajdonosa.</p>
                     <a href=\"tulajdonos_telek_hozzarendeles.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Tulajdonos hozzárendelése a telekhez</a>
-                    <br>
                     ";
                 }
             }
         }
     }
 
-    if (isset($_POST['helyrajzi_szam_alapjan'])) {
-        $helyrajzi_szam = $_POST['helyrajzi_szam'];
+    if (isset($_GET['helyrajzi_szam_alapjan'])) {
+        $helyrajzi_szam = $_GET['helyrajzi_szam'];
 
         if (strlen($helyrajzi_szam) > 255) {
             $hibak[] = "Túl hosszú a helyrajzi szám. Maximum 255 karakterből kell állnia.";
         }
 
         if (count($hibak) === 0) {
-            $helyrajzi_szam_alapjan_query = $csatlakozas->query("SELECT * FROM telek WHERE helyrajzi_szam=" . $helyrajzi_szam . ";");
+            $helyrajzi_szam_alapjan_query = $csatlakozas->query("SELECT * FROM telek WHERE helyrajzi_szam=\"" . $helyrajzi_szam . "\";");
 
             if ($helyrajzi_szam_alapjan_query->num_rows > 0) {
                 foreach ($helyrajzi_szam_alapjan_query as $telek) {
                     echo "
+            <br>
+            <br>
             <p>Helyrajzi szám: " . $telek['helyrajzi_szam'] . "</p>
             <p>Méret: " . $telek['meret'] . "m<sup>2</sup></p>
             <p>Jelleg: " . $telek['jelleg'] . "</p>
@@ -134,7 +137,7 @@ if (isset($_SESSION['hibak'])) {
             <br>
             ";
 
-                    $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_telek_birtoklas WHERE helyrajzi_szam = " . $telek['helyrajzi_szam'] . ";";
+                    $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_telek_birtoklas WHERE helyrajzi_szam = \"" . $telek['helyrajzi_szam'] . "\";";
                     $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                     if ($tulajdonos_vizsgalat_query->num_rows > 0) {
@@ -158,13 +161,12 @@ if (isset($_SESSION['hibak'])) {
 
                                 <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
                             </form>
-                            <br>";
+                            ";
                         }
                     } else {
                         echo "
                         <p>A teleknek nincs tulajdonosa.</p>
                         <a href=\"tulajdonos_telek_hozzarendeles.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Tulajdonos hozzárendelése a telekhez</a>
-                        <br>
                         ";
                     }
                 }

@@ -17,6 +17,12 @@ if (isset($_SESSION['azonosito']) && isset($_SESSION['szerepkor'])) {
         <br>
         <a href=\"ingatlan_felvitele_oldal.php\">Ingatlan felvitele</a>
         <br>
+        <a href=\"tobb_ingatlan_tulajdonos_listazasa.php\">Ingatlanok listázása, ahol több tulajdonos van</a>
+        <br>
+        <a href=\"nincs_ingatlan_listazas.php\">Telkek listázása, ahol nincs ingatlan</a>
+        <br>
+        <a href=\"tobb_ingatlan_telkek.php\">Telkek és tulajdonosok, ahol egynél több ingatlan található</a>
+        <br>
         ";
     }
 
