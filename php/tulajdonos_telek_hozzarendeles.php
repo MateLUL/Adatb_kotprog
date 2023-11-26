@@ -5,6 +5,7 @@ $hozzarendeles = $_POST['hozzarendeles'];
 $azonosito = $_POST['azonosito'];
 $tulajdonhanyad = $_POST['tulajdonhanyad'];
 $helyrajzi_szam = $_POST['helyrajzi_szam'];
+
 $hibak = [];
 
 if (isset($hozzarendeles)) {
@@ -15,21 +16,25 @@ if (isset($hozzarendeles)) {
         $hibak[] = "Túl hosszú a tulajdonhányad. Maximum 255 karakterből kell állnia.";
     }
 
-    $azonosito_letezik = "SELECT azonosito FROM felhasznalo WHERE azonosito='$azonosito'";
+    $azonosito_letezik = "SELECT azonosito, id FROM felhasznalo WHERE azonosito='$azonosito'";
     $azonosito_letezik_query = $csatlakozas->query($azonosito_letezik);
 
     if ($azonosito_letezik_query->num_rows == 0) {
         $hibak[] = "Nem létezik ilyen azonosítójú felhasználó.";
+    } else {
+        foreach ($azonosito_letezik_query as $row) {
+            $f_id = $row['id'];
+        }
+
+        $tulajdonos_telek_letezik = "SELECT f_id FROM tulajdonos_telek_birtoklas WHERE f_id='$f_id' AND helyrajzi_szam='$helyrajzi_szam';";
+        $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
+
+        if ($tulajdonos_telek_letezik_query->num_rows > 0) {
+            $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja ezt a telket.";
+        }
     }
 
-    $tulajdonos_telek_letezik = "SELECT azonosito FROM tulajdonos_telek_birtoklas WHERE azonosito='$azonosito' AND helyrajzi_szam='$helyrajzi_szam';";
-    $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
-
-    if ($tulajdonos_telek_letezik_query->num_rows > 0) {
-        $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja ezt a telket.";
-    }
-
-    $tulajdonos_telek = "INSERT INTO tulajdonos_telek_birtoklas (azonosito, helyrajzi_szam, tulajdonhanyad) VALUES ('$azonosito', '$helyrajzi_szam', '$tulajdonhanyad');";
+    $tulajdonos_telek = "INSERT INTO tulajdonos_telek_birtoklas (f_id, helyrajzi_szam, tulajdonhanyad) VALUES ('$f_id', '$helyrajzi_szam', '$tulajdonhanyad');";
 
     if (count($hibak) === 0) {
         if ($csatlakozas->query($tulajdonos_telek) === TRUE) {
