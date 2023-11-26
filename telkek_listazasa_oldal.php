@@ -73,12 +73,12 @@ if (isset($_SESSION['hibak'])) {
         if (isset($_GET['osszes']) && $_SESSION['szerepkor'] == 2) {
             $query = $csatlakozas->query(
                 "SELECT * FROM telek
-            INNER JOIN tulajdonos_telek_birtoklas AS ttb ON telek.helyrajzi_szam = ttb.helyrajzi_szam AND ttb.azonosito = \"" . $_SESSION['azonosito'] . "\"");
+            INNER JOIN tulajdonos_telek_birtoklas AS ttb ON telek.helyrajzi_szam = ttb.helyrajzi_szam AND ttb.f_id = \"" . $_SESSION['id'] . "\"");
         }
         if (isset($_GET['helyrajzi_szam']) && $_SESSION['szerepkor'] == 2) {
             $helyrajzi_szam = $_GET['helyrajzi_szam'];
             $query = $csatlakozas->query("SELECT * FROM telek
-            INNER JOIN tulajdonos_telek_birtoklas AS ttb ON telek.helyrajzi_szam = ttb.helyrajzi_szam AND ttb.azonosito = \"" . $_SESSION['azonosito'] . "\" AND ttb.helyrajzi_szam = \"$helyrajzi_szam\";");
+            INNER JOIN tulajdonos_telek_birtoklas AS ttb ON telek.helyrajzi_szam = ttb.helyrajzi_szam AND ttb.f_id = \"" . $_SESSION['id'] . "\" AND ttb.helyrajzi_szam = \"$helyrajzi_szam\";");
         }
 
         if ($query->num_rows > 0) {
@@ -106,7 +106,7 @@ if (isset($_SESSION['hibak'])) {
                     }
 
                     foreach ($tulajdonos_vizsgalat_query as $tulajdonos) {
-                        echo "<p>Azonosító: " . $tulajdonos['azonosito'] . "</p>";
+                        echo "<p>Azonosító: <i>" . $tulajdonos['azonosito'] . "</i></p>";
                         echo "<p>Tulajdonba kerülés: " . $tulajdonos['tulajdonba_kerules'] . "</p>";
                         echo "<p>Tulajdonhányad százalékban: " . $tulajdonos['tulajdonhanyad'] . "%</p>";
 

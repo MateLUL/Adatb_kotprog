@@ -5,7 +5,7 @@ $azonosito = trim($_POST['azonosito']);
 $jelszo = trim($_POST['jelszo']);
 
 if (isset($azonosito) && isset($jelszo)) {
-    $sqlQuery = "SELECT azonosito, jelszo, szerepkor FROM felhasznalo WHERE azonosito='$azonosito'";
+    $sqlQuery = "SELECT id, azonosito, jelszo, szerepkor FROM felhasznalo WHERE azonosito='$azonosito'";
     $eredmeny = $csatlakozas->query($sqlQuery);
 
     if ($eredmeny->num_rows == 1) {
@@ -15,6 +15,7 @@ if (isset($azonosito) && isset($jelszo)) {
                 $_SESSION['azonosito'] = $azonosito;
                 $_SESSION['belepett'] = "belepett";
                 $_SESSION['szerepkor'] = $user['szerepkor'];
+                $_SESSION['id'] = $user['id'];
 
                 $bejelentkezett = "UPDATE felhasznalo SET `be_van-e_jelentkezve` = 1, utolso_belepes_idopontja = now() WHERE azonosito = '$azonosito';";
                 $bejelentkezett_query = $csatlakozas->query($bejelentkezett);

@@ -82,7 +82,7 @@ if (isset($_SESSION['hibak'])) {
         if (isset($_GET['osszes']) && $_SESSION['szerepkor'] == 2) {
             $query = $csatlakozas->query("SELECT * FROM ingatlan
             INNER JOIN ingatlan_cim ON ingatlan.ingatlan_azonosito = ingatlan_cim.ingatlan_azonosito
-            INNER JOIN tulajdonos_ingatlan_birtoklas AS tib ON tib.ingatlan_azonosito = ingatlan.ingatlan_azonosito AND tib.azonosito = '" . $_SESSION['azonosito'] . "'");
+            INNER JOIN tulajdonos_ingatlan_birtoklas AS tib ON tib.ingatlan_azonosito = ingatlan.ingatlan_azonosito AND tib.f_id = '" . $_SESSION['id'] . "'");
         }
 
 
@@ -90,7 +90,7 @@ if (isset($_SESSION['hibak'])) {
             $ingatlan_azonosito = $_GET['ingatlan_azonosito'];
             $query = $csatlakozas->query("SELECT * FROM ingatlan
             INNER JOIN ingatlan_cim ON ingatlan.ingatlan_azonosito = ingatlan_cim.ingatlan_azonosito AND ingatlan.ingatlan_azonosito = '$ingatlan_azonosito'
-            INNER JOIN tulajdonos_ingatlan_birtoklas AS tib ON tib.ingatlan_azonosito = ingatlan.ingatlan_azonosito AND ingatlan.ingatlan_azonosito = '$ingatlan_azonosito' AND tib.azonosito = '" . $_SESSION['azonosito'] . "'");
+            INNER JOIN tulajdonos_ingatlan_birtoklas AS tib ON tib.ingatlan_azonosito = ingatlan.ingatlan_azonosito AND ingatlan.ingatlan_azonosito = '$ingatlan_azonosito' AND tib.f_id = '" . $_SESSION['id'] . "'");
         }
 
 
@@ -140,7 +140,7 @@ if (isset($_SESSION['hibak'])) {
                     }
 
                     foreach ($tulajdonos_vizsgalat_query as $tulajdonos) {
-                        echo "<p>Azonosító: " . $tulajdonos['azonosito'] . "</p>";
+                        echo "<p>Azonosító: <i>" . $tulajdonos['azonosito'] . "</i></p>";
                         echo "<p>Tulajdonba kerülés: " . $tulajdonos['tulajdonba_kerules'] . "</p>";
                         echo "<p>Tulajdonhányad százalékban: " . $tulajdonos['tulajdonhanyad'] . "%</p>";
 

@@ -43,8 +43,14 @@ if (isset($_SESSION['hibak'])) {
     $azonosito = $_SESSION['azonosito'];
 
     $sajat_adatok = "SELECT iranyitoszam_telepules.telepules AS t_varos, iranyitoszam_telepules.iranyitoszam AS t_iranyitoszam, felhasznalo.azonosito, felhasznalo_neve.keresztnev AS f_keresztnev, felhasznalo_neve.vezeteknev AS f_vezeteknev, adoszam, felhasznalo_lakcim.iranyitoszam AS f_iranyitoszam, utca, hazszam, telefonszam, szuletesi_datum, felhasznalo_anyja_neve.vezeteknev AS a_vezeteknev, felhasznalo_anyja_neve.keresztnev AS a_keresztnev
-    FROM iranyitoszam_telepules, felhasznalo, felhasznalo_adoszam, felhasznalo_anyja_neve, felhasznalo_infok, felhasznalo_lakcim, felhasznalo_neve
-    WHERE felhasznalo.azonosito = \"$azonosito\" AND iranyitoszam_telepules.iranyitoszam = felhasznalo_lakcim.iranyitoszam AND felhasznalo_adoszam.azonosito = felhasznalo.azonosito AND felhasznalo_anyja_neve.azonosito = felhasznalo.azonosito AND felhasznalo_infok.azonosito = felhasznalo.azonosito AND felhasznalo_neve.azonosito = felhasznalo.azonosito AND felhasznalo_lakcim.azonosito = felhasznalo.azonosito";
+    FROM felhasznalo
+    INNER JOIN felhasznalo_lakcim ON felhasznalo_lakcim.id = felhasznalo.id
+    INNER JOIN felhasznalo_neve ON felhasznalo_neve.id = felhasznalo.id
+    INNER JOIN felhasznalo_infok ON felhasznalo_infok.id = felhasznalo.id
+    INNER JOIN felhasznalo_anyja_neve ON felhasznalo_anyja_neve.id = felhasznalo.id
+    INNER JOIN felhasznalo_adoszam ON felhasznalo_adoszam.id = felhasznalo.id
+    INNER JOIN iranyitoszam_telepules ON felhasznalo_lakcim.iranyitoszam = iranyitoszam_telepules.iranyitoszam
+    WHERE felhasznalo.azonosito = \"$azonosito\"";
     
     $sajat_adatok_query = $csatlakozas->query($sajat_adatok);
 
@@ -76,6 +82,14 @@ if (isset($_SESSION['hibak'])) {
 
                 <label for=\"vezeteknev\">Vezetéknév</label>
                 <input type=\"text\" name=\"vezeteknev\" id=\"vezeteknev\" required value=" . $adat['f_vezeteknev'] . ">
+                <br>
+
+                <label for=\"jelszo\">Jelszó</label>
+                <input type=\"password\" name=\"jelszo\" id=\"jelszo\">
+                <br>
+
+                <label for=\"jelszo_ism\">Jelszó ismételve</label>
+                <input type=\"password\" name=\"jelszo_ism\" id=\"jelszo_ism\">
                 <br>
 
                 <label for=\"adoszam\">Adószám</label>
