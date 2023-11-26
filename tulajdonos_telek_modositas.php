@@ -31,10 +31,11 @@ if (isset($_SESSION['sikeres_tulajdonos_modositas'])) {
         <br>
 
         <label for="tulajdonhanyad">Tulajdonhányad (százalékban)</label>
-        <input type="number" name="tulajdonhanyad" id="tulajdonhanyad" value="<?php echo $_POST['tulajdonhanyad']; ?>"required>%
+        <input type="number" name="tulajdonhanyad" id="tulajdonhanyad" value="<?php echo $_POST['tulajdonhanyad']; ?>" required>%
         <br>
 
         <input type="hidden" name="helyrajzi_szam" value="<?php echo $_POST['helyrajzi_szam']; ?>">
+        <input type="hidden" name="eredeti_azonosito" value="<?php echo $_POST['azonosito']; ?>">
 
         <input type="submit" value="Módosítás" name="modositas">
     </form>

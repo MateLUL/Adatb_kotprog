@@ -70,6 +70,7 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
     // Ha nincs hiba
     if (count($hibak) === 0) {
         // Adatok mentése
+        $hivatali_dolgozo = "INSERT INTO felhasznalo (azonosito, jelszo, szerepkor) VALUES ('$azonosito', '$hasheltJelszo', 1);";
         $felhasznalo = "INSERT INTO felhasznalo (azonosito, jelszo) VALUES ('$azonosito', '$hasheltJelszo');";
         $felhasznalo_adoszam = "INSERT INTO felhasznalo_adoszam (azonosito, adoszam) VALUES ('$azonosito', '$adoszam');";
         $felhasznalo_infok = "INSERT INTO felhasznalo_infok (azonosito, telefonszam, szuletesi_datum) VALUES ('$azonosito', '$telefonszam', '$szuldatum');";
@@ -84,22 +85,42 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
 
         // Ha van már ilyen irányítószámú település a táblában, akkor az $iranyitoszam_telepules queryt skipeljük
         if ($telepules_elerheto_query->num_rows > 0) {
-            if ($csatlakozas->query($felhasznalo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
+            if ($csatlakozas->query("SELECT * FROM felhasznalo;")->num_rows > 0) {
+                if ($csatlakozas->query($felhasznalo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
+                    session_start();
+                    $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
+                    header("Location: ./../bejelentkezes_oldal.php");
+                } else {
+                    echo "SQL hiba.";
+                }
+            } else {
+                if ($csatlakozas->query($hivatali_dolgozo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
+                    session_start();
+                    $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
+                    header("Location: ./../bejelentkezes_oldal.php");
+                } else {
+                    echo "SQL hiba.";
+                }
+            }
+        }
+
+        // Queryk futtatása
+        if ($csatlakozas->query("SELECT * FROM felhasznalo;")->num_rows > 0) {
+            if ($csatlakozas->query($felhasznalo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($iranyitoszam_telepules) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
                 session_start();
                 $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
                 header("Location: ./../bejelentkezes_oldal.php");
             } else {
                 echo "SQL hiba.";
             }
-        }
-
-        // Queryk futtatása
-        if ($csatlakozas->query($felhasznalo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($iranyitoszam_telepules) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
-            session_start();
-            $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
-            header("Location: ./../bejelentkezes_oldal.php");
         } else {
-            echo "SQL hiba.";
+            if ($csatlakozas->query($hivatali_dolgozo) === TRUE && $csatlakozas->query($felhasznalo_adoszam) === TRUE && $csatlakozas->query($felhasznalo_infok) === TRUE && $csatlakozas->query($iranyitoszam_telepules) === TRUE && $csatlakozas->query($felhasznalo_lakcim) === TRUE && $csatlakozas->query($felhasznalo_neve) === TRUE && $csatlakozas->query($felhasznalo_anyja_neve) === TRUE) {
+                session_start();
+                $_SESSION['sikeres_regisztracio'] = "sikeres_regisztracio";
+                header("Location: ./../bejelentkezes_oldal.php");
+            } else {
+                echo "SQL hiba.";
+            }
         }
     } else {
         session_start();

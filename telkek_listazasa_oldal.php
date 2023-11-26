@@ -97,7 +97,7 @@ if (isset($_SESSION['hibak'])) {
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {
-                    echo "<br><p>Tulajdonosok:</p>";
+                    echo "<br><p><i>Tulajdonosok:</i></p>";
 
                     if ($_SESSION['szerepkor'] == 1) {
                         echo "<a href=\"tulajdonos_telek_hozzarendeles.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Új tulajdonos hozzárendelése a telekhez</a>";
@@ -131,6 +131,8 @@ if (isset($_SESSION['hibak'])) {
                 ";
                 }
             }
+        } else {
+            echo "Nincs megjeleníthető telek.";
         }
     }
 

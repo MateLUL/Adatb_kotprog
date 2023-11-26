@@ -70,10 +70,6 @@ if (isset($_SESSION['hibak'])) {
             <p>Adatok frissítése</p>
 
             <form action=\"./php/szemelyes_adatok_modositasa.php\" method=\"post\">
-                <label for=\"azonosito\">Azonosító</label>
-                <input type=\"text\" name=\"azonosito\" id=\"azonosito\" required value=" . $adat['azonosito'] . ">
-                <br>
-
                 <label for=\"keresztnev\">Keresztnév</label>
                 <input type=\"text\" name=\"keresztnev\" id=\"keresztnev\" required value=" . $adat['f_keresztnev'] . ">
                 <br>

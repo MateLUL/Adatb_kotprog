@@ -16,6 +16,7 @@ if (isset($_SESSION['sikeres_torles'])) {
     session_unset();
     session_destroy();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="hu">

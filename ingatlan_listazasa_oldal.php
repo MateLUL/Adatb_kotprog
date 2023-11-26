@@ -131,7 +131,7 @@ if (isset($_SESSION['hibak'])) {
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {
-                    echo "<p>Tulajdonosok:</p>";
+                    echo "<p><i>Tulajdonosok:</i></p>";
 
                     if ($_SESSION['szerepkor'] == 1) {
                         echo "<a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Új tulajdonos hozzárendelése az ingatlanhoz</a>";
@@ -166,6 +166,8 @@ if (isset($_SESSION['hibak'])) {
                     ";
                 }
             }
+        } else {
+            echo "Nincs megjeleníthető ingatlan.";
         }
     }
 

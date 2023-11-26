@@ -95,8 +95,6 @@ INSERT INTO `felhasznalo` (`azonosito`, `jelszo`, `utolso_belepes_idopontja`, `b
 ('user49', '$2y$10$yyM9kC5V8ylnyUL1X10GzOq6t1lP96bVvtNYNv3SSRm2yS4fT6rjy', NULL, 0, 2),
 ('user5', '$2y$10$zdXGmWeASitM8MeZS1bDYOMaCTeDg.KMRfWpum.QblZFmRuDFBFJu', NULL, 0, 2),
 ('user50', '$2y$10$wqL6Wxt4vAXhRdMxQuSDWeHeRT.QX4P5F0XVQxJwF5fCwgdys5HZa', NULL, 0, 2),
-('user51', '$2y$10$rHRNVBXQCMelZD0TsjWGke8bKF/o1u5ml0Y4uoFw8YTpLlThnExY6', NULL, 0, 2),
-('user52', '$2y$10$pn1ADhZKW7vyW6mN1SBPl.BQXy.ZBTsScyy5az/1vV1u2yLMzFgfa', NULL, 0, 2),
 ('user6', '$2y$10$2OHVvIT4XMqR2QD7kMZqR.5eukm.GkHXlLUeAAtj7aXKvQEGDSsQu', NULL, 0, 2),
 ('user7', '$2y$10$yyM9kC5V8ylnyUL1X10GzOq6t1lP96bVvtNYNv3SSRm2yS4fT6rjy', NULL, 0, 2),
 ('user8', '$2y$10$wqL6Wxt4vAXhRdMxQuSDWeHeRT.QX4P5F0XVQxJwF5fCwgdys5HZa', NULL, 0, 2),

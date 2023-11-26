@@ -5,6 +5,7 @@ $helyrajzi_szam = $_POST['helyrajzi_szam'];
 $azonosito = $_POST['azonosito'];
 $tulajdonhanyad = $_POST['tulajdonhanyad'];
 $modositas = $_POST['modositas'];
+$eredeti_azonosito = $_POST['eredeti_azonosito'];
 
 $hibak = [];
 if (isset($modositas)) {
@@ -22,15 +23,19 @@ if (isset($modositas)) {
         $hibak[] = "Nincs ilyen azonosítójú felhasználó.";
     }
 
-    $tulajdonos_telek_letezik = "SELECT azonosito FROM tulajdonos_telek_birtoklas WHERE azonosito='$azonosito' AND helyrajzi_szam='$helyrajzi_szam';";
-    $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
+    if ($eredeti_azonosito != $azonosito) {
+        $tulajdonos_telek_letezik = "SELECT azonosito FROM tulajdonos_telek_birtoklas WHERE azonosito='$azonosito' AND helyrajzi_szam='$helyrajzi_szam';";
+        $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
+        if ($tulajdonos_telek_letezik_query->num_rows > 0) {
+            $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja a telket.";
+        }
 
-    if ($tulajdonos_telek_letezik_query->num_rows > 0) {
-        $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja a telket.";
+        $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = '$helyrajzi_szam' AND azonosito = $eredeti_azonosito;";
+    } else {
+        $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = '$helyrajzi_szam' AND azonosito = $eredeti_azonosito;";
     }
 
-
-    $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = $helyrajzi_szam;";
+    $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = '$helyrajzi_szam' AND azonosito = $eredeti_azonosito;";
 
     if (count($hibak) === 0) {
         if ($csatlakozas->query($tulajdonos_modositas) === TRUE) {

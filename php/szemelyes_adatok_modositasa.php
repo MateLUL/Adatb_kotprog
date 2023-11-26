@@ -2,7 +2,6 @@
 session_start();
 require "sql_csatlakozas.php";
 
-$azonosito = trim($_POST["azonosito"]);
 $vezeteknev = trim($_POST["vezeteknev"]);
 $keresztnev = trim($_POST["keresztnev"]);
 $szuldatum = trim($_POST["szuldatum"]);
@@ -14,16 +13,16 @@ $hazszam = trim($_POST["hazszam"]);
 $telefonszam = trim($_POST["telefonszam"]);
 $anyja_keresztnev = trim($_POST["anyja_keresztnev"]);
 $anyja_vezeteknev = trim($_POST["anyja_vezeteknev"]);
-$regi_azonosito = $_SESSION['azonosito'];
+$azonosito = $_SESSION['azonosito'];
+$jelszo = trim($_POST["jelszo"]);
+$jelszo_ism = trim($_POST["jelszo_ism"]);
+
 
 $hibak = [];
 
 
 // Hibakezelés
-if (isset($azonosito) && isset($vezeteknev) && isset($keresztnev) && isset($szuldatum) && isset($adoszam) && isset($iranyitoszam) && isset($varos) && isset($utca) && isset($hazszam) && isset($telefonszam) && isset($anyja_keresztnev) && isset($anyja_vezeteknev)) {
-    if (strlen($azonosito) < 3 || strlen($azonosito) > 255) {
-        $hibak[] = "Túl hosszú vagy rövid az azonosító. Minimum 3, maximum 255 karakterből kell állnia.";
-    }
+if (isset($jelszo) && isset($jelszo_ism) && isset($vezeteknev) && isset($keresztnev) && isset($szuldatum) && isset($adoszam) && isset($iranyitoszam) && isset($varos) && isset($utca) && isset($hazszam) && isset($telefonszam) && isset($anyja_keresztnev) && isset($anyja_vezeteknev)) {
     if (strlen($vezeteknev) < 2 || strlen($vezeteknev) > 255) {
         $hibak[] = "Túl hosszú vagy rövid a vezetéknév. Minimum 2, maximum 255 karakterből kell állnia.";
     }
@@ -51,28 +50,25 @@ if (isset($azonosito) && isset($vezeteknev) && isset($keresztnev) && isset($szul
     if (strlen($anyja_vezeteknev) < 2 || strlen($anyja_vezeteknev) > 255) {
         $hibak[] = "Túl hosszú vagy rövid az anyja vezetékneve. Minimum 2, maximum 255 karakterből kell állnia.";
     }
-
-    if ($regi_azonosito != $azonosito) {
-        $azonosito_elerheto = "SELECT azonosito FROM felhasznalo WHERE azonosito='$azonosito'";
-        $azonosito_elerheto_query = $csatlakozas->query($azonosito_elerheto);
-
-        if ($azonosito_elerheto_query->num_rows > 0) {
-            $hibak[] = "Az azonosító foglalt.";
-        }
-
-        $foreign_key_drop = "";
+    if (strlen($jelszo) < 6 || strlen($jelszo) > 255) {
+        $hibak[] = "Túl hosszú vagy rövid a jelszó. Minimum 6, maximum 255 karakterből kell állnia.";
     }
+    if ($jelszo != $jelszo_ism) {
+        $hibak[] = "A megadott 2 jelszó nem egyezik meg.";
+    }
+
+    $jelszo_hashed = password_hash($jelszo, PASSWORD_DEFAULT);
 
     // Ha nincs hiba
     if (count($hibak) === 0) {
         // Adatok mentése
         $iranyitoszam_telepules = "INSERT INTO iranyitoszam_telepules (iranyitoszam, telepules) VALUES ('$iranyitoszam', '$varos')";
-        $felhasznalo_adoszam = "UPDATE felhasznalo_adoszam SET azonosito = '$azonosito', adoszam = '$adoszam' WHERE azonosito = '$regi_azonosito';";
-        $felhasznalo_infok = "UPDATE felhasznalo_infok SET azonosito = '$azonosito', telefonszam = '$telefonszam', szuletesi_datum = '$szuldatum' WHERE azonosito = '$regi_azonosito';";
-        $felhasznalo_lakcim = "UPDATE felhasznalo_lakcim SET azonosito = '$azonosito', iranyitoszam = '$iranyitoszam', utca = '$utca', hazszam = '$hazszam' WHERE azonosito = '$regi_azonosito';";
-        $felhasznalo_neve = "UPDATE felhasznalo_neve SET azonosito = '$azonosito', vezeteknev = '$vezeteknev', keresztnev = '$keresztnev' WHERE azonosito = '$regi_azonosito';";
-        $felhasznalo_anyja_neve = "UPDATE felhasznalo_anyja_neve SET azonosito = '$azonosito', vezeteknev = '$anyja_vezeteknev', keresztnev = '$anyja_keresztnev' WHERE azonosito = '$regi_azonosito';";
-        $felhasznalo = "UPDATE felhasznalo SET azonosito = '$azonosito' WHERE azonosito = '$regi_azonosito';";
+        $felhasznalo_adoszam = "UPDATE felhasznalo_adoszam SET adoszam = '$adoszam' WHERE azonosito = '$azonosito';";
+        $felhasznalo_infok = "UPDATE felhasznalo_infok SET telefonszam = '$telefonszam', szuletesi_datum = '$szuldatum' WHERE azonosito = '$azonosito';";
+        $felhasznalo_lakcim = "UPDATE felhasznalo_lakcim SET iranyitoszam = '$iranyitoszam', utca = '$utca', hazszam = '$hazszam' WHERE azonosito = '$azonosito';";
+        $felhasznalo_neve = "UPDATE felhasznalo_neve SET vezeteknev = '$vezeteknev', keresztnev = '$keresztnev' WHERE azonosito = '$azonosito';";
+        $felhasznalo_anyja_neve = "UPDATE felhasznalo_anyja_neve SET vezeteknev = '$anyja_vezeteknev', keresztnev = '$anyja_keresztnev' WHERE azonosito = '$azonosito';";
+        $felhasznalo = "UPDATE felhasznalo SET jelszo = '$jelszo_hashed' WHERE azonosito = '$azonosito';";
 
         // Irányítószám lekérése
         $telepules_elerheto = "SELECT iranyitoszam, telepules FROM iranyitoszam_telepules WHERE iranyitoszam='$iranyitoszam'";
