@@ -102,7 +102,7 @@ if (isset($_SESSION['hibak'])) {
                     echo "<br><p><i>Tulajdonosok:</i></p>";
 
                     if ($_SESSION['szerepkor'] == 1) {
-                        echo "<a href=\"tulajdonos_telek_hozzarendeles.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Új tulajdonos hozzárendelése a telekhez</a>";
+                        echo "<a href=\"tulajdonos_telek_hozzarendeles_oldal.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Új tulajdonos hozzárendelése a telekhez</a>";
                     }
 
                     foreach ($tulajdonos_vizsgalat_query as $tulajdonos) {
@@ -131,7 +131,7 @@ if (isset($_SESSION['hibak'])) {
                 } else {
                     echo "
                 <p>A teleknek nincs tulajdonosa.</p>
-                <a href=\"tulajdonos_telek_hozzarendeles.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Tulajdonos hozzárendelése a telekhez</a>
+                <a href=\"tulajdonos_telek_hozzarendeles_oldal.php?helyrajzi_szam=" . $telek['helyrajzi_szam'] . "\">Tulajdonos hozzárendelése a telekhez</a>
                 ";
                 }
             }
