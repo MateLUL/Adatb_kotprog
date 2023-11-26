@@ -27,7 +27,9 @@ if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
     INNER JOIN telek AS t ON t.helyrajzi_szam = ttb.helyrajzi_szam
     INNER JOIN ingatlan AS i ON i.helyrajzi_szam = t.helyrajzi_szam
     GROUP BY ttb.helyrajzi_szam, felhasznalo.azonosito
-    HAVING COUNT(i.helyrajzi_szam) > 1
+    HAVING (
+        SELECT COUNT(helyrajzi_szam) FROM ingatlan
+    ) > 1
     ORDER BY ttb.helyrajzi_szam ASC;");
 
     $elozo_helyrajzi_szam = "";
