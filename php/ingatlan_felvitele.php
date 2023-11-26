@@ -25,8 +25,8 @@ if (isset($felvitel)) {
     if (strlen($jelleg) > 255) {
         $hibak[] = "Túl hosszú a jelleg. Maximum 255 karakterből kell állnia.";
     }
-    if (strlen($becsult_ertek) > 255) {
-        $hibak[] = "Túl hosszú a becsült érték. Maximum 255 karakterből kell állnia.";
+    if (strlen($becsult_ertek) > 20) {
+        $hibak[] = "Túl hosszú a becsült érték. Maximum 20 karakterből kell állnia.";
     }
     if (strlen($iranyitoszam) < 2 || strlen($iranyitoszam) > 255) {
         $hibak[] = "Túl hosszú vagy rövid az irányítószám. Minimum 2, maximum 255 karakterből kell állnia.";

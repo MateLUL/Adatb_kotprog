@@ -15,21 +15,25 @@ if (isset($hozzarendeles)) {
         $hibak[] = "Túl hosszú a tulajdonhányad. Maximum 255 karakterből kell állnia.";
     }
 
-    $azonosito_letezik = "SELECT azonosito FROM felhasznalo WHERE azonosito='$azonosito'";
+    $azonosito_letezik = "SELECT azonosito, id FROM felhasznalo WHERE azonosito='$azonosito'";
     $azonosito_letezik_query = $csatlakozas->query($azonosito_letezik);
 
     if ($azonosito_letezik_query->num_rows == 0) {
         $hibak[] = "Nem létezik ilyen azonosítójú felhasználó.";
+    } else {
+        foreach ($azonosito_letezik_query as $row) {
+            $f_id = $row['id'];
+        }
+
+        $tulajdonos_ingatlan_letezik = "SELECT f_id FROM tulajdonos_ingatlan_birtoklas WHERE f_id='$f_id' AND ingatlan_azonosito='$ingatlan_azonosito';";
+        $tulajdonos_ingatlan_letezik_query = $csatlakozas->query($tulajdonos_ingatlan_letezik);
+
+        if ($tulajdonos_ingatlan_letezik_query->num_rows > 0) {
+            $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja ezt az ingatlant.";
+        }
     }
 
-    $tulajdonos_ingatlan_letezik = "SELECT azonosito FROM tulajdonos_ingatlan_birtoklas WHERE azonosito='$azonosito' AND ingatlan_azonosito='$ingatlan_azonosito';";
-    $tulajdonos_ingatlan_letezik_query = $csatlakozas->query($tulajdonos_ingatlan_letezik);
-
-    if ($tulajdonos_ingatlan_letezik_query->num_rows > 0) {
-        $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja ezt az ingatlant.";
-    }
-
-    $tulajdonos_ingatlan = "INSERT INTO tulajdonos_ingatlan_birtoklas (azonosito, ingatlan_azonosito, tulajdonhanyad) VALUES ('$azonosito', '$ingatlan_azonosito', '$tulajdonhanyad');";
+    $tulajdonos_ingatlan = "INSERT INTO tulajdonos_ingatlan_birtoklas (f_id, ingatlan_azonosito, tulajdonhanyad) VALUES ('$f_id', '$ingatlan_azonosito', '$tulajdonhanyad');";
 
     if (count($hibak) === 0) {
         if ($csatlakozas->query($tulajdonos_ingatlan) === TRUE) {
