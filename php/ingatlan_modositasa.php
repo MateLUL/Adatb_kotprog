@@ -1,8 +1,8 @@
 <?php
 require "sql_csatlakozas.php";
 
-$ingatlan_azonosito = $_POST['ingatlan_azonosito'];
 $jelleg = $_POST['jelleg'];
+$ingatlan_azonosito = $_POST['ingatlan_azonosito'];
 $epites_eve = $_POST['epites_eve'];
 $becsult_ertek = $_POST['becsult_ertek'];
 $helyrajzi_szam = $_POST['helyrajzi_szam'];
@@ -16,9 +16,6 @@ $hibak = [];
 if (isset($modositas)) {
     if (strlen($helyrajzi_szam) > 255) {
         $hibak[] = "Túl hosszú a helyrajzi szám. Maximum 255 karakterből kell állnia.";
-    }
-    if (strlen($ingatlan_azonosito) > 255) {
-        $hibak[] = "Túl hosszú az ingatlan azonosítója. Maximum 255 karakterből kell állnia.";
     }
     if (strlen($epites_eve) > 255) {
         $hibak[] = "Túl hosszú az építés éve. Maximum 255 karakterből kell állnia.";
@@ -44,13 +41,6 @@ if (isset($modositas)) {
 
     if ($helyrajzi_szam_elerheto_query->num_rows == 0) {
         $hibak[] = "Nincs ilyen helyrajzi számú telek.";
-    }
-
-    $ingatlan_azonosito_elerheto = "SELECT ingatlan_azonosito FROM ingatlan WHERE ingatlan_azonosito='$ingatlan_azonosito'";
-    $ingatlan_azonosito_elerheto_query = $csatlakozas->query($ingatlan_azonosito_elerheto);
-
-    if ($ingatlan_azonosito_elerheto_query ->num_rows > 0) {
-        $hibak[] = "Van már ilyen azonosítójú ingatlan.";
     }
 
     $iranyitoszam_elerheto = "SELECT iranyitoszam FROM iranyitoszam_telepules WHERE iranyitoszam='$iranyitoszam'";

@@ -136,7 +136,7 @@ if (isset($_SESSION['hibak'])) {
                     echo "<p><i>Tulajdonosok:</i></p>";
 
                     if ($_SESSION['szerepkor'] == 1) {
-                        echo "<a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Új tulajdonos hozzárendelése az ingatlanhoz</a>";
+                        echo "<a href=\"tulajdonos_ingatlan_hozzarendeles_oldal.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Új tulajdonos hozzárendelése az ingatlanhoz</a>";
                     }
 
                     foreach ($tulajdonos_vizsgalat_query as $tulajdonos) {
@@ -147,14 +147,16 @@ if (isset($_SESSION['hibak'])) {
                         if ($_SESSION['szerepkor'] == 1) {
                             echo "
                             <form action=\"./php/tulajdonos_ingatlan_torles.php\" method=\"post\">
-                                <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
+                                <input type=\"hidden\" name=\"f_id\" value=\"" . $tulajdonos['f_id'] . "\">
                                 <input type=\"submit\" value=\"Tulajdonos törlése\" name=\"tulajdonos_torles\">
                             </form>
 
-                            <form action=\"./tulajdonos_ingatlan_modositas.php\" method=\"post\">
+                            <form action=\"./tulajdonos_ingatlan_modositas_oldal.php\" method=\"post\">
                                 <input type=\"hidden\" name=\"ingatlan_azonosito\" value=\"" . $ingatlan['ingatlan_azonosito'] . "\">
                                 <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
                                 <input type=\"hidden\" name=\"tulajdonhanyad\" value=\"" . $tulajdonos['tulajdonhanyad'] . "\">
+                                <input type=\"hidden\" name=\"tib_id\" value=\"" . $tulajdonos['tib_id'] . "\">
+                                <input type=\"hidden\" name=\"f_id\" value=\"" . $tulajdonos['f_id'] . "\">
 
                                 <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
                             </form>
@@ -164,7 +166,7 @@ if (isset($_SESSION['hibak'])) {
                 } else {
                     echo "
                     <p>Az ingatlannak nincs tulajdonosa.</p>
-                    <a href=\"tulajdonos_ingatlan_hozzarendeles.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
+                    <a href=\"tulajdonos_ingatlan_hozzarendeles_oldal.php?ingatlan_azonosito=" . $ingatlan['ingatlan_azonosito'] . "\">Tulajdonos hozzárendelése az ingatlanhoz</a>
                     ";
                 }
             }

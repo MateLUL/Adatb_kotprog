@@ -113,7 +113,7 @@ if (isset($_SESSION['hibak'])) {
                         if ($_SESSION['szerepkor'] == 1) {
                             echo "<form action=\"./php/tulajdonos_telek_torles.php\" method=\"post\">
                             <input type=\"submit\" value=\"Tulajdonos törlése\" name=\"tulajdonos_torles\">
-                            <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
+                            <input type=\"hidden\" name=\"f_id\" value=\"" . $tulajdonos['f_id'] . "\">
                             </form>
 
                             <form action=\"./tulajdonos_telek_modositas_oldal.php\" method=\"post\">

@@ -21,10 +21,6 @@ if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
     <p>Adatok módosítása a(z) <?php echo $_POST['ingatlan_azonosito']; ?> azonosítójú ingatlanhoz</p>
 
     <form action="./php/ingatlan_modositasa.php" method="post">
-        <label for="ingatlan_azonosito">Ingatlan azonosítója</label>
-        <input type="text" name="ingatlan_azonosito" id="ingatlan_azonosito" required value="<?php echo $_POST['ingatlan_azonosito']; ?>">
-        <br>
-
         <label for="jelleg">Jelleg</label>
         <input type="text" name="jelleg" id="jelleg" required value="<?php echo $_POST['jelleg']; ?>">
         <br>
@@ -52,6 +48,8 @@ if (!isset($_SESSION['azonosito']) || $_SESSION['szerepkor'] == 2) {
         <label for="epites_eve">Házszám</label>
         <input type="text" name="hazszam" id="hazszam" required value="<?php echo $_POST['hazszam']; ?>">
         <br>
+
+        <input type="hidden" name="ingatlan_azonosito" value="<?php echo $_POST['ingatlan_azonosito']; ?>">
 
         <input type="submit" value="Módosítás" name="modositas">
     </form>

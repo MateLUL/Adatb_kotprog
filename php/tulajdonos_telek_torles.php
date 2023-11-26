@@ -3,8 +3,8 @@ require "./sql_csatlakozas.php";
 
 
 if (isset($_POST['tulajdonos_torles'])) {
-    $azonosito = $_POST['azonosito'];
-    $torles = "DELETE FROM tulajdonos_telek_birtoklas WHERE azonosito='$azonosito';";
+    $f_id = $_POST['f_id'];
+    $torles = "DELETE FROM tulajdonos_telek_birtoklas WHERE f_id='$f_id';";
 
     if ($csatlakozas->query($torles) === TRUE) {
         session_start();
