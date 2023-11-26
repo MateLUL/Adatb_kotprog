@@ -5,7 +5,8 @@ $helyrajzi_szam = $_POST['helyrajzi_szam'];
 $azonosito = $_POST['azonosito'];
 $tulajdonhanyad = $_POST['tulajdonhanyad'];
 $modositas = $_POST['modositas'];
-$eredeti_azonosito = $_POST['eredeti_azonosito'];
+$eredeti_f_id = $_POST['eredeti_f_id'];
+$ttb_id = $_POST['ttb_id'];
 
 $hibak = [];
 if (isset($modositas)) {
@@ -16,26 +17,28 @@ if (isset($modositas)) {
         $hibak[] = "Túl hosszú a tulajdonhányad. Maximum 255 karakterből kell állnia.";
     }
 
-    $azonosito_elerheto = "SELECT azonosito FROM felhasznalo WHERE azonosito='$azonosito'";
+    $azonosito_elerheto = "SELECT azonosito, id FROM felhasznalo WHERE azonosito='$azonosito'";
     $azonosito_elerheto_query = $csatlakozas->query($azonosito_elerheto);
 
     if ($azonosito_elerheto_query->num_rows == 0) {
         $hibak[] = "Nincs ilyen azonosítójú felhasználó.";
-    }
-
-    if ($eredeti_azonosito != $azonosito) {
-        $tulajdonos_telek_letezik = "SELECT azonosito FROM tulajdonos_telek_birtoklas WHERE azonosito='$azonosito' AND helyrajzi_szam='$helyrajzi_szam';";
-        $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
-        if ($tulajdonos_telek_letezik_query->num_rows > 0) {
-            $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja a telket.";
+    } else {
+        foreach ($azonosito_elerheto_query as $row) {
+            $f_id = $row['id'];
         }
 
-        $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = '$helyrajzi_szam' AND azonosito = $eredeti_azonosito;";
-    } else {
-        $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = '$helyrajzi_szam' AND azonosito = $eredeti_azonosito;";
+        if ($f_id != $eredeti_f_id) {
+            $tulajdonos_telek_letezik = "SELECT f_id FROM tulajdonos_telek_birtoklas WHERE f_id='$f_id' AND helyrajzi_szam='$helyrajzi_szam';";
+            $tulajdonos_telek_letezik_query = $csatlakozas->query($tulajdonos_telek_letezik);
+            
+            if ($tulajdonos_telek_letezik_query->num_rows > 0) {
+                $hibak[] = "Ilyen azonosítójú tulajdonos már birtokolja a telket.";
+            }
+        }
     }
 
-    $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET azonosito = '$azonosito', tulajdonhanyad = '$tulajdonhanyad' WHERE helyrajzi_szam = '$helyrajzi_szam' AND azonosito = $eredeti_azonosito;";
+
+    $tulajdonos_modositas = "UPDATE tulajdonos_telek_birtoklas SET f_id = '$f_id', tulajdonhanyad = '$tulajdonhanyad' WHERE ttb_id = $ttb_id;";
 
     if (count($hibak) === 0) {
         if ($csatlakozas->query($tulajdonos_modositas) === TRUE) {

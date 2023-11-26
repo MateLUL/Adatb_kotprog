@@ -35,7 +35,9 @@ if (isset($_SESSION['sikeres_tulajdonos_modositas'])) {
         <br>
 
         <input type="hidden" name="helyrajzi_szam" value="<?php echo $_POST['helyrajzi_szam']; ?>">
-        <input type="hidden" name="eredeti_azonosito" value="<?php echo $_POST['azonosito']; ?>">
+        <input type="hidden" name="eredeti_f_id" value="<?php echo $_POST['f_id']; ?>">
+        <input type="hidden" name="ttb_id" value="<?php echo $_POST['ttb_id']; ?>">
+
 
         <input type="submit" value="Módosítás" name="modositas">
     </form>

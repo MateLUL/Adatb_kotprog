@@ -127,7 +127,9 @@ if (isset($_SESSION['hibak'])) {
                 </form>";
             }
 
-                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_ingatlan_birtoklas WHERE ingatlan_azonosito = \"" . $ingatlan['ingatlan_azonosito'] . "\";";
+                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_ingatlan_birtoklas
+                INNER JOIN felhasznalo ON felhasznalo.id = tulajdonos_ingatlan_birtoklas.f_id
+                WHERE ingatlan_azonosito = \"" . $ingatlan['ingatlan_azonosito'] . "\";";
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {

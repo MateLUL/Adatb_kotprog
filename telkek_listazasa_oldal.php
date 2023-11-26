@@ -93,7 +93,9 @@ if (isset($_SESSION['hibak'])) {
         <p>Becsült érték: " . $telek['becsult_ertek'] . " Ft</p>
         ";
 
-                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_telek_birtoklas WHERE helyrajzi_szam = \"" . $telek['helyrajzi_szam'] . "\";";
+                $tulajdonos_vizsgalat = "SELECT * FROM tulajdonos_telek_birtoklas
+                INNER JOIN felhasznalo ON felhasznalo.id = tulajdonos_telek_birtoklas.f_id
+                WHERE helyrajzi_szam = \"" . $telek['helyrajzi_szam'] . "\";";
                 $tulajdonos_vizsgalat_query = $csatlakozas->query($tulajdonos_vizsgalat);
 
                 if ($tulajdonos_vizsgalat_query->num_rows > 0) {
@@ -114,10 +116,12 @@ if (isset($_SESSION['hibak'])) {
                             <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
                             </form>
 
-                            <form action=\"./tulajdonos_telek_modositas.php\" method=\"post\">
+                            <form action=\"./tulajdonos_telek_modositas_oldal.php\" method=\"post\">
                                 <input type=\"hidden\" name=\"helyrajzi_szam\" value=\"" . $telek['helyrajzi_szam'] . "\">
                                 <input type=\"hidden\" name=\"azonosito\" value=\"" . $tulajdonos['azonosito'] . "\">
                                 <input type=\"hidden\" name=\"tulajdonhanyad\" value=\"" . $tulajdonos['tulajdonhanyad'] . "\">
+                                <input type=\"hidden\" name=\"f_id\" value=\"" . $tulajdonos['f_id'] . "\">
+                                <input type=\"hidden\" name=\"ttb_id\" value=\"" . $tulajdonos['ttb_id'] . "\">
 
                                 <input type=\"submit\" value=\"Tulajdonos módosítása\" name=\"modositas\">
                             </form>
