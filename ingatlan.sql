@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Nov 26, 2023 at 03:44 PM
+-- Generation Time: Nov 26, 2023 at 06:56 PM
 -- Server version: 8.1.0
 -- PHP Version: 8.2.11
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `ingatlan`
 --
+CREATE DATABASE IF NOT EXISTS `ingatlan` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `ingatlan`;
 
 -- --------------------------------------------------------
 
@@ -28,9 +30,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `felhasznalo` (
-  `id` int NOT NULL,
-  `azonosito` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó azonosítója (kulcs)',
-  `jelszo` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Hashelt jelszó',
+  `id` int NOT NULL COMMENT 'Felhasználó kulcsa (PK)',
+  `azonosito` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó azonosítója (UNIQUE)',
+  `jelszo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Hashelt jelszó',
   `utolso_belepes_idopontja` timestamp NULL DEFAULT NULL COMMENT 'Utolsó belépés időpontja (automatikus update',
   `be_van-e_jelentkezve` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Ha 1: be van jelentkezve, ha 0: nincs bejelentkezve',
   `szerepkor` int UNSIGNED NOT NULL DEFAULT '2' COMMENT 'Ha az érték 1: hivatali dolgozó, ha 2: tulajdonos'
@@ -104,8 +106,8 @@ INSERT INTO `felhasznalo` (`id`, `azonosito`, `jelszo`, `utolso_belepes_idopontj
 --
 
 CREATE TABLE `felhasznalo_adoszam` (
-  `id` int NOT NULL,
-  `adoszam` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó adószáma'
+  `id` int NOT NULL COMMENT 'Felhasználó kulcsa (PK, FK)',
+  `adoszam` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó adószáma (UNIQUE)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Felhasználók adószáma';
 
 --
@@ -113,61 +115,61 @@ CREATE TABLE `felhasznalo_adoszam` (
 --
 
 INSERT INTO `felhasznalo_adoszam` (`id`, `adoszam`) VALUES
+(8, '10234567890'),
+(30, '10987654311'),
+(52, '10987654312'),
+(41, '10987654313'),
+(17, '10987654320'),
+(43, '10987654332'),
+(32, '10987654333'),
+(45, '10987654354'),
+(34, '10987654355'),
+(47, '10987654376'),
+(36, '10987654377'),
+(49, '10987654398'),
+(38, '10987654399'),
+(27, '10987654889'),
 (1, '112312ASD2'),
 (2, '112312ASD3'),
 (3, '112312ASD4'),
-(4, '112312ASD2'),
 (6, '112312ASD5'),
+(4, '112312ASD7'),
 (7, '12345678901'),
-(8, '10234567890'),
-(9, '21098765432'),
-(10, '32109876543'),
-(11, '43210987654'),
-(12, '54321098765'),
-(13, '65432109876'),
-(14, '76543210987'),
-(15, '87654321098'),
-(16, '98765432109'),
-(17, '10987654320'),
-(18, '23456789012'),
-(19, '98765432101'),
-(20, '87654321021'),
-(21, '76543210932'),
-(22, '65432109843'),
-(23, '54321098754'),
-(24, '43210987665'),
-(25, '32109876576'),
-(26, '21098765487'),
-(27, '10987654398'),
 (28, '21098765409'),
-(29, '34567890123'),
-(30, '10987654310'),
 (31, '21098765421'),
-(32, '10987654332'),
+(42, '21098765422'),
+(50, '21098765423'),
+(9, '21098765432'),
 (33, '21098765443'),
-(34, '10987654354'),
 (35, '21098765465'),
-(36, '10987654376'),
-(37, '21098765487'),
-(38, '10987654398'),
-(39, '21098765409'),
+(26, '21098765487'),
+(46, '21098765759'),
+(44, '21098765851'),
+(37, '21098766471'),
+(48, '21098767591'),
+(39, '2109878598'),
+(18, '23456789012'),
+(10, '32109876543'),
+(25, '32109876576'),
+(29, '34567890123'),
+(11, '43210987654'),
+(24, '43210987665'),
 (40, '45678901234'),
-(41, '10987654310'),
-(42, '21098765421'),
-(43, '10987654332'),
-(44, '21098765443'),
-(45, '10987654354'),
-(46, '21098765465'),
-(47, '10987654376'),
-(48, '21098765487'),
-(49, '10987654398'),
-(50, '21098765409'),
+(23, '54321098754'),
+(12, '54321098765'),
 (51, '56789012345'),
-(52, '10987654310'),
+(22, '65432109843'),
+(13, '65432109876'),
 (53, '67890123456'),
+(21, '76543210932'),
+(14, '76543210987'),
 (54, '78901234567'),
+(20, '87654321021'),
+(15, '87654321098'),
 (55, '89012345678'),
-(56, '90123456789');
+(56, '90123456789'),
+(19, '98765432101'),
+(16, '98765432109');
 
 -- --------------------------------------------------------
 
@@ -176,9 +178,9 @@ INSERT INTO `felhasznalo_adoszam` (`id`, `adoszam`) VALUES
 --
 
 CREATE TABLE `felhasznalo_anyja_neve` (
-  `id` int NOT NULL,
-  `vezeteknev` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó anyjának vezetékneve',
-  `keresztnev` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó anyjának keresztneve'
+  `id` int NOT NULL COMMENT 'Felhasználó kulcsa (PK, FK)',
+  `vezeteknev` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó anyjának vezetékneve',
+  `keresztnev` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó anyjának keresztneve'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Felhasználók anyjának teljes neve';
 
 --
@@ -249,8 +251,8 @@ INSERT INTO `felhasznalo_anyja_neve` (`id`, `vezeteknev`, `keresztnev`) VALUES
 --
 
 CREATE TABLE `felhasznalo_infok` (
-  `id` int NOT NULL,
-  `telefonszam` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telefonszám',
+  `id` int NOT NULL COMMENT 'Felhasználó kulcsa (PK, FK)',
+  `telefonszam` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telefonszám',
   `szuletesi_datum` date NOT NULL COMMENT 'Felhasználó születési dátuma'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Felhasználók privát adatai';
 
@@ -259,10 +261,10 @@ CREATE TABLE `felhasznalo_infok` (
 --
 
 INSERT INTO `felhasznalo_infok` (`id`, `telefonszam`, `szuletesi_datum`) VALUES
-(1, '+36307777777', '2023-11-01'),
-(2, '+36307777777', '2000-01-05'),
-(3, '+36307777777', '2000-01-05'),
-(4, '+36307777777', '2023-11-01'),
+(1, '+363088888888', '2023-11-01'),
+(2, '+363029834', '2000-01-05'),
+(3, '+363029374873', '2000-01-05'),
+(4, '+36302485974', '2023-11-01'),
 (6, '+36307777777', '2023-11-02'),
 (7, '+1234567890', '1990-05-15'),
 (8, '+1023456789', '1996-07-31'),
@@ -322,9 +324,9 @@ INSERT INTO `felhasznalo_infok` (`id`, `telefonszam`, `szuletesi_datum`) VALUES
 --
 
 CREATE TABLE `felhasznalo_lakcim` (
-  `id` int NOT NULL,
-  `iranyitoszam` int NOT NULL COMMENT 'Település irányítószám (foreign key)',
-  `utca` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Utca neve',
+  `id` int NOT NULL COMMENT 'Felhasználó kulcsa (PK, FK)',
+  `iranyitoszam` int NOT NULL COMMENT 'Település irányítószám (FK)',
+  `utca` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Utca neve',
   `hazszam` int NOT NULL COMMENT 'Házszám'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Felhasználók lakcíme';
 
@@ -396,9 +398,9 @@ INSERT INTO `felhasznalo_lakcim` (`id`, `iranyitoszam`, `utca`, `hazszam`) VALUE
 --
 
 CREATE TABLE `felhasznalo_neve` (
-  `id` int NOT NULL,
-  `vezeteknev` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó vezetékneve',
-  `keresztnev` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó keresztneve'
+  `id` int NOT NULL COMMENT 'Felhasználó kulcsa (PK, FK)',
+  `vezeteknev` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó vezetékneve',
+  `keresztnev` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Felhasználó keresztneve'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Felhasználók teljes neve';
 
 --
@@ -469,11 +471,11 @@ INSERT INTO `felhasznalo_neve` (`id`, `vezeteknev`, `keresztnev`) VALUES
 --
 
 CREATE TABLE `ingatlan` (
-  `ingatlan_azonosito` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan azonosítója',
-  `jelleg` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan jellege',
+  `ingatlan_azonosito` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan azonosítója (PK)',
+  `jelleg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan jellege',
   `epites_eve` year NOT NULL COMMENT 'Építés éve',
   `becsult_ertek` bigint NOT NULL COMMENT 'Becsült értéke',
-  `helyrajzi_szam` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek helyrajzi száma, ahol az ingatlan található'
+  `helyrajzi_szam` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek helyrajzi száma, ahol az ingatlan található (FK)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Ingatlanok információi';
 
 --
@@ -494,9 +496,9 @@ INSERT INTO `ingatlan` (`ingatlan_azonosito`, `jelleg`, `epites_eve`, `becsult_e
 --
 
 CREATE TABLE `ingatlan_cim` (
-  `ingatlan_azonosito` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan azonosítója (kulcs)',
-  `iranyitoszam` int NOT NULL COMMENT 'Település irányítószáma (foreign key)',
-  `kozterulet` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Közterület',
+  `ingatlan_azonosito` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan azonosítója (PK, FK)',
+  `iranyitoszam` int NOT NULL COMMENT 'Település irányítószáma (FK)',
+  `kozterulet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Közterület',
   `hazszam` int NOT NULL COMMENT 'Házszám'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Ingatlanok címe';
 
@@ -518,8 +520,8 @@ INSERT INTO `ingatlan_cim` (`ingatlan_azonosito`, `iranyitoszam`, `kozterulet`, 
 --
 
 CREATE TABLE `iranyitoszam_telepules` (
-  `iranyitoszam` int NOT NULL COMMENT 'Település irányítószáma',
-  `telepules` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Település neve'
+  `iranyitoszam` int NOT NULL COMMENT 'Település irányítószáma (PK)',
+  `telepules` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Település neve (UNIQUE)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Települések irányítószáma és neve';
 
 --
@@ -527,56 +529,56 @@ CREATE TABLE `iranyitoszam_telepules` (
 --
 
 INSERT INTO `iranyitoszam_telepules` (`iranyitoszam`, `telepules`) VALUES
-(1011, 'Budapest'),
-(2030, 'Érd'),
-(2100, 'Gödöllő'),
-(2120, 'Dunakeszi'),
-(2310, 'Szigetszentmiklós'),
-(2360, 'Gyál'),
-(2400, 'Dunaujváros'),
-(2500, 'Esztergom'),
-(2600, 'Vác'),
-(2700, 'Cegléd'),
-(2800, 'Tatabánya'),
-(2890, 'Tata'),
-(3000, 'Hatvan'),
-(3100, 'Salgótarján'),
-(3200, 'Gyöngyös'),
-(3300, 'Eger'),
-(3529, 'Miskolc'),
-(4024, 'Debrecen'),
-(4200, 'Hajdúszoboszló'),
-(4220, 'Hajdúböszörmény'),
-(4400, 'Nyíregyháza'),
-(5000, 'Szolnok'),
-(5500, 'Gyomaendrőd'),
+(8400, 'Ajka'),
+(6500, 'Baja'),
 (5600, 'Békéscsaba'),
-(5900, 'Orosháza'),
+(1011, 'Budapest'),
+(2700, 'Cegléd'),
+(4024, 'Debrecen'),
+(2120, 'Dunakeszi'),
+(2400, 'Dunaujváros'),
+(3300, 'Eger'),
+(2030, 'Érd'),
+(2500, 'Esztergom'),
+(2100, 'Gödöllő'),
+(2360, 'Gyál'),
+(5500, 'Gyomaendrőd'),
+(3200, 'Gyöngyös'),
+(9021, 'Győr'),
+(4220, 'Hajdúböszörmény'),
+(4200, 'Hajdúszoboszló'),
+(3000, 'Hatvan'),
+(6800, 'Hódmezővásárhely'),
+(7400, 'Kaposvár'),
 (6000, 'Kecskemét'),
+(8360, 'Keszthely'),
 (6100, 'Kiskunfélegyháza'),
 (6120, 'Kiskunmajsa'),
-(6500, 'Baja'),
-(6600, 'Szentes'),
-(6720, 'Szeged'),
-(6800, 'Hódmezővásárhely'),
-(7100, 'Szekszárd'),
-(7400, 'Kaposvár'),
+(3529, 'Miskolc'),
+(9200, 'Mosonmagyaróvár'),
+(8800, 'Nagykanizsa'),
+(4400, 'Nyíregyháza'),
+(5900, 'Orosháza'),
+(8500, 'Pápa'),
 (7621, 'Pécs'),
+(3100, 'Salgótarján'),
+(9600, 'Sárvár'),
+(8600, 'Siófok'),
+(9400, 'Sopron'),
+(8330, 'Sümeg'),
+(6720, 'Szeged'),
 (8000, 'Székesfehérvár'),
+(7100, 'Szekszárd'),
+(6600, 'Szentes'),
+(2310, 'Szigetszentmiklós'),
+(5000, 'Szolnok'),
+(9700, 'Szombathely'),
+(2890, 'Tata'),
+(2800, 'Tatabánya'),
+(2600, 'Vác'),
 (8100, 'Várpalota'),
 (8200, 'Veszprém'),
-(8330, 'Sümeg'),
-(8360, 'Keszthely'),
-(8400, 'Ajka'),
-(8500, 'Pápa'),
-(8600, 'Siófok'),
-(8800, 'Nagykanizsa'),
-(8900, 'Zalaegerszeg'),
-(9021, 'Győr'),
-(9200, 'Mosonmagyaróvár'),
-(9400, 'Sopron'),
-(9600, 'Sárvár'),
-(9700, 'Szombathely');
+(8900, 'Zalaegerszeg');
 
 -- --------------------------------------------------------
 
@@ -585,9 +587,9 @@ INSERT INTO `iranyitoszam_telepules` (`iranyitoszam`, `telepules`) VALUES
 --
 
 CREATE TABLE `telek` (
-  `helyrajzi_szam` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek helyrajzi száma (kulcs)',
+  `helyrajzi_szam` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek helyrajzi száma (PK)',
   `meret` int NOT NULL COMMENT 'Telek mérete',
-  `jelleg` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek jellege',
+  `jelleg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek jellege',
   `becsult_ertek` bigint NOT NULL COMMENT 'Telek becsült értéke'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Telkek információi';
 
@@ -665,9 +667,9 @@ INSERT INTO `telek` (`helyrajzi_szam`, `meret`, `jelleg`, `becsult_ertek`) VALUE
 --
 
 CREATE TABLE `tulajdonos_ingatlan_birtoklas` (
-  `tib_id` int NOT NULL,
-  `f_id` int NOT NULL,
-  `ingatlan_azonosito` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan azonosító (foreign key)',
+  `tib_id` int NOT NULL COMMENT 'Tábla kulcsa (PK)',
+  `f_id` int NOT NULL COMMENT 'Felhasználó tábla kulcsa (FK)',
+  `ingatlan_azonosito` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Ingatlan azonosító (FK)',
   `tulajdonba_kerules` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Tulajdonba kerülés dátuma',
   `tulajdonhanyad` int NOT NULL COMMENT 'Tulajdonhányad százalékban'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Tulajdonosok (felhasználó) és ingatlanok kapcsolata';
@@ -689,9 +691,9 @@ INSERT INTO `tulajdonos_ingatlan_birtoklas` (`tib_id`, `f_id`, `ingatlan_azonosi
 --
 
 CREATE TABLE `tulajdonos_telek_birtoklas` (
-  `ttb_id` int NOT NULL,
-  `f_id` int NOT NULL,
-  `helyrajzi_szam` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek helyrajzi száma (foreign key)',
+  `ttb_id` int NOT NULL COMMENT 'Tábla kulcsa (PK)',
+  `f_id` int NOT NULL COMMENT 'Felhasználó tábla kulcsa (FK)',
+  `helyrajzi_szam` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Telek helyrajzi száma (FK)',
   `tulajdonba_kerules` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Tulajdonba kerülés dátuma',
   `tulajdonhanyad` int NOT NULL COMMENT 'Tulajdonhányad százalékban'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Tulajdonosok (felhasználó) és telkek kapcsolata';
@@ -723,7 +725,7 @@ ALTER TABLE `felhasznalo`
 --
 ALTER TABLE `felhasznalo_adoszam`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`,`adoszam`) USING BTREE;
+  ADD UNIQUE KEY `adoszam` (`adoszam`);
 
 --
 -- Indexes for table `felhasznalo_anyja_neve`
@@ -754,20 +756,22 @@ ALTER TABLE `felhasznalo_neve`
 -- Indexes for table `ingatlan`
 --
 ALTER TABLE `ingatlan`
-  ADD PRIMARY KEY (`ingatlan_azonosito`,`helyrajzi_szam`),
+  ADD PRIMARY KEY (`ingatlan_azonosito`),
   ADD KEY `helyrajzi_szam` (`helyrajzi_szam`);
 
 --
 -- Indexes for table `ingatlan_cim`
 --
 ALTER TABLE `ingatlan_cim`
-  ADD PRIMARY KEY (`iranyitoszam`,`ingatlan_azonosito`);
+  ADD PRIMARY KEY (`ingatlan_azonosito`),
+  ADD KEY `iranyitoszam` (`iranyitoszam`);
 
 --
 -- Indexes for table `iranyitoszam_telepules`
 --
 ALTER TABLE `iranyitoszam_telepules`
-  ADD PRIMARY KEY (`iranyitoszam`,`telepules`);
+  ADD PRIMARY KEY (`iranyitoszam`),
+  ADD UNIQUE KEY `telepules` (`telepules`);
 
 --
 -- Indexes for table `telek`
@@ -799,49 +803,49 @@ ALTER TABLE `tulajdonos_telek_birtoklas`
 -- AUTO_INCREMENT for table `felhasznalo`
 --
 ALTER TABLE `felhasznalo`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'Felhasználó kulcsa (PK)', AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `felhasznalo_adoszam`
 --
 ALTER TABLE `felhasznalo_adoszam`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'Felhasználó kulcsa (PK, FK)', AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `felhasznalo_anyja_neve`
 --
 ALTER TABLE `felhasznalo_anyja_neve`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'Felhasználó kulcsa (PK, FK)', AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `felhasznalo_infok`
 --
 ALTER TABLE `felhasznalo_infok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'Felhasználó kulcsa (PK, FK)', AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `felhasznalo_lakcim`
 --
 ALTER TABLE `felhasznalo_lakcim`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'Felhasználó kulcsa (PK, FK)', AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `felhasznalo_neve`
 --
 ALTER TABLE `felhasznalo_neve`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'Felhasználó kulcsa (PK, FK)', AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `tulajdonos_ingatlan_birtoklas`
 --
 ALTER TABLE `tulajdonos_ingatlan_birtoklas`
-  MODIFY `tib_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `tib_id` int NOT NULL AUTO_INCREMENT COMMENT 'Tábla kulcsa (PK)', AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tulajdonos_telek_birtoklas`
 --
 ALTER TABLE `tulajdonos_telek_birtoklas`
-  MODIFY `ttb_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ttb_id` int NOT NULL AUTO_INCREMENT COMMENT 'Tábla kulcsa (PK)', AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables

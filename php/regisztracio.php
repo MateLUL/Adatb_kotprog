@@ -67,6 +67,13 @@ if (isset($azonosito) && isset($jelszo) && isset($jelszo_ism) && isset($vezetekn
         $hibak[] = "Az azonosító foglalt.";
     }
 
+    $adoszam_elerheto = "SELECT adoszam FROM felhasznalo_adoszam WHERE adoszam='$adoszam'";
+    $adoszam_elerheto_query = $csatlakozas->query($adoszam_elerheto);
+
+    if ($adoszam_elerheto_query->num_rows > 0) {
+        $hibak[] = "Van már ilyen adószámú azonosító.";
+    }
+
     // Ha nincs hiba
     if (count($hibak) === 0) {
         // Adatok mentése
